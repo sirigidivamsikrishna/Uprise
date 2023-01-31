@@ -1,0 +1,55 @@
+<div class="inputTextcomponent">
+  <div
+    class="textbox"
+    [formGroup]="formGroup"
+    style="width: 100%; height: 100%; position: relative"
+  >
+    <div *ngIf="label" class="col-12 p-0 labelNames">{{ label }} &nbsp;</div>
+    <span class="p-input-icon-left" style="width: 100%">
+      <i [class]="icon"></i>
+      <input
+        [type]="type"
+        [minlength]="minlength"
+        [maxlength]="maxlength"
+        [formControlName]="name"
+        style="
+          background: rgb(15, 15, 15);
+          border: 0.6px solid rgba(240, 240, 240, 0.3);
+          border-radius: 2px;
+          box-sizing: border-box;
+          color: rgb(255, 255, 255);
+          width: 100%;
+          height: 38px;
+          padding-left: 30px;
+        "
+        pInputText
+        [ngStyle]="{
+          'padding-left': iconpadding ? '30px !important' : '10px !important'
+        }"
+        [placeholder]="placeholder"
+      />
+    </span>
+    <span
+      *ngIf="[type] == 'password' || [type] == 'show-password'"
+      style="position: absolute; right: 10px; bottom: 6px; cursor: pointer"
+    >
+      <i
+        *ngIf="[type] == 'password'"
+        (click)="icondisable()"
+        class="pi pi-eye-slash"
+      ></i>
+      <i
+        *ngIf="[type] == 'show-password'"
+        (click)="iconenable()"
+        class="pi pi-eye"
+      ></i>
+    </span>
+  </div>
+  <div>
+    <small
+      class="p-error block"
+      style="font-family: Oswald !important"
+      [innerHTML]="error !== undefined ? error : '&nbsp;'"
+    ></small>
+  </div>
+</div>

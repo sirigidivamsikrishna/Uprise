@@ -1,0 +1,24 @@
+<div [formGroup]="formGroup" style="position: relative">
+  <i
+    *ngIf="this.formGroup.get(name).value?.length > 0"
+    (click)="clearsearch()"
+    class="pi pi-times iconcross"
+  ></i>
+  <p class="mt-0 mb-2">{{ label }}</p>
+  <input
+    class="google-map"
+    [placeholder]="placeholder"
+    pInputText
+    [formControlName]="name"
+    ngx-google-places-autocomplete
+    [(options)]="options"
+    #placesRef="ngx-places"
+    (onAddressChange)="Change($event)"
+  />
+  <div [ngClass]="'input_box'">
+    <small
+      class="p-error-invalid"
+      [innerHTML]="error !== undefined ? error : '&nbsp;'"
+    ></small>
+  </div>
+</div>

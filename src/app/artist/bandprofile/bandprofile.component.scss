@@ -1,0 +1,404 @@
+@import "../../../colors.scss";
+
+.bandProfile_container {
+  background-color: #100b00;
+  height: calc(100vh - 72px);
+  padding: 10px;
+  color: #fff;
+  overflow-y: auto;
+}
+.bandProfileHeader {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 24px;
+  color: #fff;
+}
+.bandImageContainer {
+  height: 220px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.bandAboutContainer {
+  padding: 20px;
+  margin-left: 1px;
+  background: #282828;
+}
+.bandDescription {
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 22px;
+  color: #d1d1d199;
+  word-break: break-all;
+}
+.bandtitle {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 28px;
+  // line-height: 24px;
+  padding-top: 0px;
+  color: #fff;
+  padding-left: 0px;
+}
+.imgBand {
+  height: 220px;
+  width: 100%;
+  object-fit: cover;
+}
+.imgBand1 {
+  height: 120px;
+  max-width: 100%;
+  object-fit: cover;
+}
+.bandImageContainer:hover .imgBand {
+  opacity: 0.2;
+}
+.pensilEditor {
+  visibility: hidden;
+}
+.bandImageContainer:hover .pensilEditor {
+  visibility: visible;
+}
+.upload-btn-band {
+  padding: 12px 16px;
+  background: #dcf763;
+  border: 0.6px solid #dcf763;
+  box-sizing: border-box;
+  color: #000;
+  font-weight: 500;
+  box-shadow: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 16px;
+  font-family: Oswald !important;
+  min-width: 150px;
+}
+.confirmationdialog {
+  ::ng-deep {
+    .p-dialog .p-dialog-header {
+      display: none;
+    }
+  }
+
+  .info_icon {
+    color: #dcf763;
+    font-size: 50px;
+    text-align: center;
+    padding-top: 20px;
+  }
+
+  .warning_message {
+    font-weight: 500;
+    font-size: 26px;
+    line-height: 36px;
+    text-align: center;
+    letter-spacing: 0.01em;
+    padding-bottom: 0;
+    // color: #fff;
+    color: rgb(255, 255, 255);
+    font-family: Oswald !important;
+  }
+
+  .deletFooter {
+    .p-button {
+      font-family: normal;
+      height: 42px;
+      width: 150px;
+      border-radius: 30px;
+      background-color: $primary;
+      color: black;
+      border-color: #dcf763;
+    }
+
+    .p-button:focus {
+      box-shadow: none;
+    }
+
+    .backgroundButton {
+      margin-left: 20px;
+
+      .p-button {
+        background-color: transparent;
+        color: #dcf763;
+        border-color: #dcf763;
+        font-family: sans-serif !important;
+      }
+
+      .p-button:enabled:hover {
+        background: none !important;
+        color: #dcf763;
+        border-color: #dcf763;
+      }
+    }
+
+    .p-button:enabled:hover {
+      background: #dcf763 !important;
+      color: #000000;
+      border-color: #dcf763;
+    }
+  }
+}
+.Upload-btn {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  top: 20px;
+  width: -moz-fit-content;
+  width: fit-content;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  background-color: #dcf763;
+  text-align: center;
+  padding: 10px 20px;
+  color: #000;
+  border: 1px solid #dcf763;
+  box-sizing: border-box;
+  box-shadow: none;
+  border-radius: 30px;
+  cursor: pointer;
+}
+.info-msgs {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: #fff6;
+  margin-top: 0px;
+}
+.imagedeleteicon {
+  position: absolute;
+  top: 1px;
+  right: 3%;
+}
+.uploadpicture:hover {
+  opacity: 0.4;
+}
+
+.imagedeleteicon {
+  visibility: hidden;
+}
+
+.uploadpicture:hover + .imagedeleteicon {
+  visibility: visible;
+}
+
+.imagedeleteicon:hover {
+  visibility: visible;
+}
+.modelTextArea {
+  .p-inputtext {
+    height: fit-content !important;
+    padding-left: 1.5rem;
+  }
+}
+
+.upload_gallery_card {
+  position: relative;
+  height: 152px;
+  cursor: pointer;
+  background: #282828;
+  color: #fff;
+}
+.upload_gallery_icon {
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+input[type="checkbox"]:checked:after {
+  content: "\2714";
+  color: #fff;
+}
+.checkBox_Icon {
+  width: 15px !important;
+  height: 15px !important;
+  margin: 0;
+  padding: 0;
+  -webkit-appearance: none;
+  -o-appearance: none;
+  appearance: none;
+  box-shadow: none;
+  font-size: 0.8em;
+  text-align: center;
+  border: 0.6px solid #ffffff;
+  border-radius: 3px;
+  background: #202020;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  cursor: pointer;
+}
+.galleryBandProfile {
+  ::ng-deep {
+    .cancelButton .p-button {
+      width: 130px !important;
+    }
+  }
+}
+// gallery image checkbox icon
+.checkBox_Icon {
+  visibility: hidden;
+}
+
+.imageWrap:hover .checkBox_Icon {
+  visibility: visible;
+}
+
+.checkBox_Icon_on {
+  visibility: visible;
+}
+
+// deleteModal
+.confirmationdialog {
+  ::ng-deep {
+    .p-dialog .p-dialog-header {
+      display: none;
+    }
+  }
+
+  .info_icon {
+    color: #dcf763;
+    font-size: 50px;
+    text-align: center;
+    padding-top: 20px;
+  }
+
+  .warning_message {
+    font-weight: 500;
+    font-size: 26px;
+    line-height: 36px;
+    text-align: center;
+    letter-spacing: 0.01em;
+    padding-bottom: 0;
+    // color: #fff;
+    color: rgb(255, 255, 255);
+    font-family: Oswald !important;
+  }
+
+  .deletFooter {
+    .p-button {
+      font-family: normal;
+      height: 42px;
+      width: 150px;
+      border-radius: 30px;
+      background-color: $primary;
+      color: black;
+      border-color: #dcf763;
+    }
+
+    .p-button:focus {
+      box-shadow: none;
+    }
+
+    .backgroundButton {
+      margin-left: 20px;
+
+      .p-button {
+        background-color: transparent;
+        color: #dcf763;
+        border-color: #dcf763;
+        font-family: sans-serif !important;
+      }
+
+      .p-button:enabled:hover {
+        background: none !important;
+        color: #dcf763;
+        border-color: #dcf763;
+      }
+    }
+
+    .p-button:enabled:hover {
+      background: #dcf763 !important;
+      color: #000000;
+      border-color: #dcf763;
+    }
+  }
+}
+
+// add Band Member
+
+::ng-deep {
+  p-autocomplete.ng-dirty.ng-invalid > .p-autocomplete > .p-inputtext {
+    border: 0.6px solid rgba(240, 240, 240, 0.3) !important;
+  }
+  .p-autocomplete {
+    min-width: 100%;
+    background-color: #0f0f0f !important;
+    .pi {
+      margin-top: -6px !important;
+    }
+  }
+  .p-autocomplete-panel {
+    background: #141414;
+    max-height: 300px !important;
+  }
+  .p-autocomplete-panel .p-autocomplete-items .p-autocomplete-item {
+    margin: 0;
+    border: 0 none;
+    color: #fff;
+    font-size: 14px;
+    background: transparent;
+    transition: box-shadow 0.2s;
+    border-radius: 0;
+  }
+  .p-autocomplete-panel .p-autocomplete-items .p-autocomplete-empty-message {
+    margin: 0;
+    padding: 0.5rem 1rem;
+    border: none;
+    color: #fff;
+    background: transparent;
+    font-size: 14px;
+    transition: box-shadow 0.2s;
+    border-radius: 0;
+  }
+  .p-autocomplete-panel .p-autocomplete-items .p-autocomplete-item:hover {
+    color: #fff;
+    background: #141414;
+    .bandMemberEmail {
+      color: #dcf763;
+    }
+  }
+}
+
+.bandProfilePicDefault {
+  height: 64px;
+  width: 64px;
+  border-radius: 50%;
+  font-size: 32px;
+  letter-spacing: 30px;
+  overflow: hidden;
+  padding-left: 22px;
+  object-fit: cover;
+  background-color: #3f3f3f;
+  color: white;
+  display: flex;
+  align-items: center;
+  font-weight: 300;
+}
+.removeBandMember_icon {
+  visibility: hidden;
+}
+.removeBandMember_icon:hover {
+  visibility: visible;
+}
+.removeBandMember_icon:hover ~ .listenerMember {
+  opacity: 0.2;
+}
+
+.listenerMember:hover {
+  opacity: 0.2;
+}
+.listenerMember:hover ~ .removeBandMember_icon {
+  visibility: visible;
+}
+
+::ng-deep {
+  .p-galleria .p-galleria-close .p-galleria-close-icon {
+    font-size: 20px;
+  }
+  .p-galleria .p-galleria-close {
+    width: 35px;
+    height: 35px;
+  }
+}

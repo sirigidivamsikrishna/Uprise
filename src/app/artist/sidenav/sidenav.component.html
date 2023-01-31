@@ -1,0 +1,9 @@
+<div class="sidenav-container">
+  <ul class="sidenav-list">
+    <li class="sidenav-list-item" *ngFor="let item of urls">
+      <a routerLink="{{ item.route }}" routerLinkActive="active"
+        ><i class="{{ item.icon }} pr-2" aria-hidden="true"></i>{{ item.name }}
+      </a>
+    </li>
+  </ul>
+</div>

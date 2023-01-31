@@ -1,0 +1,22 @@
+ .p-button:focus {
+     box-shadow: none;
+ }
+
+ .p-button {
+     color: #000000;
+     background: #dcf763;
+     border-radius: 41px !important;
+     border: 1px solid #dcf763;
+     padding: 0.75rem 1.25rem;
+     height: 37px;
+     width: 200px;
+     font-size: 1rem;
+     transition: background-color 0.2s, color 0.2s, border-color 0.2s,
+         box-shadow 0.2s;
+     border-radius: 6px;
+ }
+ .p-button:enabled:hover {
+     background: #dcf763;
+     color: black;
+     border-color:#dcf763;
+ }

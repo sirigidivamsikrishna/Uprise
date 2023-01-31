@@ -1,0 +1,26 @@
+<div class="signup_container">
+  <div class="signup_card">
+    <div>
+      <div class="logo_body">
+        <img height="80px" src="../../../assets/images/Vector.png" />
+      </div>
+      <br />
+      <div class="header" style="text-align: center">
+        <p class="heading_1">Thank you for Registering!!</p>
+        <p class="heading_2">You've successfully got registered with us.</p>
+        <p class="heading_2">
+          Please check your email for verification process
+        </p>
+      </div>
+
+      <br />
+      <div class="submit_button" style="text-align: center; margin-top: 15px">
+        <app-button
+          [type]="'button'"
+          (submitForm)="clickhere()"
+          [label]="'Click Here'"
+        ></app-button>
+      </div>
+    </div>
+  </div>
+</div>

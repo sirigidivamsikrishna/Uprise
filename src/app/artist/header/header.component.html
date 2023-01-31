@@ -1,0 +1,143 @@
+<div class="header_container">
+  <div class="header_component grid">
+    <div class="header_left">
+      <img class="header_image" src="../../../assets/images/uprise.png" />
+      <p class="header_text">UPRISE</p>
+    </div>
+    <div class="header_right_container">
+      <div class="header_right grid">
+        <div class="avatar" (click)="op.toggle($event)">
+          <img
+            class="avatar_image"
+            [src]="useravatar ? useravatar : defaultavatar"
+          />
+        </div>
+        <div class="username" (click)="op.toggle($event)">
+          {{ username }} <i class="pi pi-angle-down down_arrow"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-overlayPanel #op [style]="{ width: '450px' }">
+  <ng-template pTemplate>
+    <div class="overlay_template">
+      <p style="cursor: pointer">
+        <i class="pi pi-user iconoverlay"></i> My Profile
+      </p>
+      <p style="cursor: pointer" (click)="changePassword()">
+        <i class="pi pi-unlock iconoverlay"></i> Change Password
+      </p>
+      <p style="cursor: pointer" (click)="logout()">
+        <i class="pi pi-sign-out iconoverlay"></i> Logout
+      </p>
+    </div>
+  </ng-template>
+</p-overlayPanel>
+
+<div>
+  <p-dialog
+    [header]="'Change Password'"
+    [modal]="true"
+    [(visible)]="changePasswordModal"
+    [style]="{ width: '650px' }"
+    [draggable]="false"
+    styleClass="active"
+    [contentStyle]="{
+      'overflow-y': 'visible',
+      'overflow-x': 'visible'
+    }"
+  >
+    <div class="model_card_body">
+      <div>
+        <br />
+        <div class="col-12" style="height: 100px">
+          <app-input-text
+            [formGroup]="changePasswordForm"
+            name="oldpassword"
+            [placeholder]="'Enter old password'"
+            [label]="'Current password'"
+            [type]="'password'"
+            [icon]="'pi pi-unlock'"
+            [error]="
+              inputRequiredValidation(changePasswordForm, 'oldpassword')
+                ? 'Password is required.'
+                : errorList['']
+            "
+          >
+          </app-input-text>
+        </div>
+        <div class="col-12" style="height: 100px">
+          <app-input-text
+            [formGroup]="changePasswordForm"
+            name="password"
+            [placeholder]="'Enter new password'"
+            [label]="'New password'"
+            [type]="'password'"
+            [icon]="'pi pi-unlock'"
+            [error]="
+              inputRequiredValidation(changePasswordForm, 'password')
+                ? 'Password is required.'
+                : inputPatternValidation(changePasswordForm, 'password')
+                ? 'Passsword must have Atleast 8 letters consists Capital,Small one number and special caracter'
+                : changePasswordValidation(
+                    changePasswordForm,
+                    'password',
+                    'oldpassword'
+                  )
+                ? 'New password must be different from current password.'
+                : errorList['']
+            "
+          >
+          </app-input-text>
+        </div>
+        <div class="col-12" style="height: 100px">
+          <app-input-text
+            [formGroup]="changePasswordForm"
+            name="cpassword"
+            [placeholder]="'Enter confirm new password'"
+            [label]="'Confirm new password'"
+            [type]="'password'"
+            [icon]="'pi pi-unlock'"
+            [error]="
+              inputRequiredValidation(changePasswordForm, 'cpassword')
+                ? 'Confirm Password is required.'
+                : checkPasswordValidation(
+                    changePasswordForm,
+                    'password',
+                    'cpassword'
+                  )
+                ? 'Passwords Didnt matched'
+                : errorList['']
+            "
+          >
+          </app-input-text>
+        </div>
+        <div class="grid">
+          <div class="col-6"></div>
+          <div class="col-3 text-center">
+            <span class="cancelButton">
+              <p-button
+                (click)="close()"
+                label="Cancel"
+                class="modelCancelButton"
+              ></p-button>
+            </span>
+          </div>
+          <div class="col-3">
+            <div style="max-width: 100px">
+              <p-button
+                label="Save"
+                (click)="save()"
+                [type]="'submit'"
+                class="modelSaveButton"
+                [disabled]="changePasswordForm.invalid"
+              ></p-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </p-dialog>
+</div>

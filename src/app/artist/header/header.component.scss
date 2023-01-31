@@ -1,0 +1,93 @@
+.header_container {
+  background-color: #000000;
+  color: #ffffff;
+  text-align: left;
+  overflow: hidden;
+  // border-bottom: 1px solid red;
+  z-index: 1000;
+}
+.header_image {
+  height: 32px;
+  margin-top: 19px;
+  margin-left: 9px;
+  margin-right: 5px;
+}
+.header_text {
+  font-size: 20px;
+  color: white;
+  font-family: Oswald !important;
+}
+.header_component{
+border-bottom: 1px solid #524646ad;
+}
+        
+.header_left {
+  display: flex;
+  margin-left: 30px;
+}
+.header_right_container {
+  margin: auto;
+  margin-right: 20px;
+  padding-top: 7px;
+}
+.header_right {
+  text-align: right;
+}
+.grid {
+  margin: 0px;
+}
+.avatar_image {
+  border-radius: 50%;
+  top: 0px;
+  height: 40px;
+  width: 40px;
+  background-color: #3f3f3f;
+}
+.username {
+  cursor: pointer;
+  font-family: Oswald !important;
+  margin-top: 8px;
+  margin-left: 15px;
+  font-size: 17px;
+}
+
+::ng-deep {
+  .p-overlaypanel {
+    max-width: 200px;
+  }
+  .p-overlaypanel .p-overlaypanel-content {
+    padding: 1px 15px;
+    background: #141414;
+    color: #fff;
+  }
+}
+
+.iconoverlay{
+    margin-right: 5px;
+}
+.overlay_template{
+font-family: Oswald !important;
+}
+::ng-deep {
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px rgb(15, 15, 15) inset !important;
+  }
+
+  input:-webkit-autofill {
+    -webkit-text-fill-color: rgb(255, 255, 255) !important;
+  }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+
+    -webkit-box-shadow: 0 0 0 30px rgb(15, 15, 15) inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-text-fill-color: #fff !important;
+  }
+}

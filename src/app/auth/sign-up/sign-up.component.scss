@@ -1,0 +1,284 @@
+@import "../../../colors.scss";
+
+font {
+  font-family: Oswald !important;
+}
+
+.signup_container {
+  background-image: url(./../../../assets/images/bg-img-main.png);
+  background-size: cover;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.signup_card {
+  color: #fff;
+  background: rgba(51, 51, 51, 0.3);
+  border: 0.6px solid rgba(240, 240, 240, 0.2);
+  box-sizing: border-box;
+  border-radius: 2px;
+  width: 930px;
+  height: fit-content;
+  padding: 30px 35px;
+}
+.logo_body {
+  text-align: center;
+}
+.profiles {
+  border: 3px solid #ffff;
+  border-radius: 50%;
+  position: relative;
+  background: #f0f0f0;
+  width: 95px;
+  margin: 0 auto;
+  height: 92px;
+  // margin-top: 8px;
+}
+.uploaded-profile-pic {
+  height: 94px;
+  width: 98px;
+  border-radius: 50%;
+  position: absolute;
+  left: -4px;
+  top: -4px;
+  object-fit: cover;
+
+  background-color: $avatarbg;
+}
+.border_profile {
+  border: 3px solid white;
+}
+.upload_icon_signup {
+  position: absolute;
+  top: 66px;
+  background: $primary;
+  border-radius: 50%;
+  padding: 0 8px 4px;
+  right: 2px;
+  color: #000;
+}
+.grid {
+  display: flex;
+  font-family: Oswald !important;
+  flex-wrap: wrap;
+  margin-right: -0.5rem;
+  margin-left: -0.5rem;
+  margin-top: -0.5rem;
+}
+
+.a {
+  color: $primary !important;
+}
+.terms_conditions {
+  font-family: Oswald !important;
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+.terms {
+  color: $primary;
+}
+.for_signup {
+  font-family: Oswald !important;
+}
+::ng-deep {
+  .p-error {
+    color: red;
+  }
+  // .p-checkbox:not(.p-checkbox-disabled).p-checkbox-box.p-focus{
+  //   border-color: $primary;
+  // }
+  .p-checkbox .p-checkbox-box .p-checkbox-icon {
+    color: #000000;
+  }
+  .p-checkbox .p-checkbox-box {
+    border: 2px solid #fff;
+    background: #121212;
+    width: 1.25rem;
+    height: 1.25rem;
+    color: #ffffffde;
+    border-radius: 0.188rem;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s,
+      box-shadow 0.2s;
+  }
+
+  .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-highlight:hover {
+    border-color: $primary;
+    background: $primary;
+    color: black;
+  }
+
+  .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-highlight {
+    border-color: $primary;
+    background: $primary;
+    color: black;
+    box-shadow: none;
+  }
+
+  .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box:hover {
+    box-shadow: none;
+    border-color: $primary;
+    outline: 0 none;
+    outline-offset: 0;
+  }
+}
+
+.avatarModelDivision {
+  ::ng-deep .p-component {
+    font-family: Oswald !important;
+  }
+  .modalProfilepic {
+    border: 3px solid #ffff;
+    border-radius: 50%;
+    position: relative;
+    background: $primary;
+    width: 95px;
+    margin: 0 auto;
+    height: 92px;
+    margin-bottom: 20px;
+
+    .profilepic_remove {
+      position: absolute;
+      font-size: 20px;
+      top: 0px;
+      right: 4px;
+      background-color: #000;
+      border-radius: 10px;
+      cursor: pointer;
+      color: #fff;
+    }
+  }
+  .modelProfileText {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 38px;
+    text-align: center;
+    color: #fff;
+  }
+  .modelFooter {
+    text-align: center;
+    margin-top: 50px;
+  }
+  ::ng-deep {
+    .p-dialog .p-dialog-header {
+      display: none;
+    }
+    .p-dialog .p-dialog-content {
+      background: $modelbg;
+      padding: 25px;
+      min-width: 675px;
+    }
+    .p-dialog .p-dialog-footer {
+      display: none;
+    }
+
+    .p-button {
+      height: 42px;
+      width: 150px;
+      border-radius: 30px;
+      background-color: $primary;
+      color: black;
+      border-color: #dcf763;
+    }
+    .p-button:focus {
+      box-shadow: none;
+    }
+    .backgroundButton {
+      margin-left: 20px;
+      .p-button {
+        background-color: transparent;
+        color: white;
+        border-color: #dcf763;
+        font-family: sans-serif !important;
+      }
+    }
+  }
+  .modelPicsDisplay {
+    margin-top: 30px;
+    max-height: 250px;
+    overflow: auto;
+  }
+  .model_avatar_images {
+    border-radius: 50%;
+    background: #3f3f3f;
+  }
+  .model_avatar_images:active {
+    border: 2px solid $primary;
+  }
+
+  .modal_view_content {
+    padding: 0px 50px;
+  }
+  // .bordercolor{
+  // border: 2px solid $primary;
+  // }
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #3f3f3f;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: white;
+  border-radius: 6px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: white;
+}
+
+// chechbox box shadow
+:host ::ng-deep .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-focus {
+  box-shadow: none;
+  border-color: white;
+}
+
+::ng-deep {
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px rgb(15, 15, 15) inset !important;
+  }
+  input:-webkit-autofill {
+    -webkit-text-fill-color: rgb(255, 255, 255) !important;
+  }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px rgb(15, 15, 15) inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-text-fill-color: #fff !important;
+  }
+}
+.locationAutocomplete {
+  ::ng-deep {
+    .p-inputtext {
+      background: rgb(15, 15, 15);
+      border: 0.6px solid rgba(240, 240, 240, 0.3);
+      border-radius: 2px;
+      box-sizing: border-box;
+      color: rgb(255, 255, 255);
+      width: 100%;
+      height: 38px;
+      font-family: Oswald !important;
+      font-size: 14px !important;
+      font-weight: 400;
+      padding-left: 30px;
+    }
+         .iconcross {
+           top: calc(50% - -3px);
+         }
+  }
+ 
+}

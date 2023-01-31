@@ -1,0 +1,28 @@
+<div
+  class="textbox"
+  [formGroup]="formGroup"
+  style="width: 100%; height: 100%; position: relative"
+>
+  <div class="col-12 p-0 labelNames">{{ label }} &nbsp;</div>
+
+  <span class="p-input-icon-left" style="width: 100%">
+    <i [class]="icon" style="z-index: 100"></i>
+    <p-autoComplete
+      class="location_style"
+      [formControlName]="name"
+      [placeholder]="placeholder"
+      [suggestions]="results"
+      [(ngModel)]="binding"
+      (onKeyUp)="locationChange()"
+    ></p-autoComplete>
+  </span>
+</div>
+<div>
+  <small
+    class="p-error block"
+    [innerHTML]="error !== undefined ? error : '&nbsp;'"
+  ></small>
+</div>
+<!-- [(ngModel)]="text"
+    [suggestions]="results"
+    (completeMethod)="search($event)" -->

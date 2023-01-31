@@ -1,0 +1,82 @@
+::ng-deep {
+    .p-calendar {
+        min-width: 100%;
+        font-size: 14px;
+
+        .p-button:enabled:hover {
+            color: white;
+            background: #0f0f0f;
+            border: 0.6px solid rgba(240, 240, 240, 0.3);
+        }
+    }
+
+    .p-datepicker table td.p-datepicker-today>span {
+        background: #0f0f0f;
+        color: #ffffff;
+        border-color: transparent;
+    }
+
+    .p-datepicker:not(.p-disabled) table td span:not(.p-highlight):not(.p-disabled):hover {
+        background: #0f0f0f;
+    }
+
+    .p-calendar-w-btn .p-datepicker-trigger {
+        width: 40px;
+        height: 38px;
+        color: white;
+        background: #0f0f0f;
+        border: 0.6px solid rgba(240, 240, 240, 0.3);
+    }
+
+    .p-calendar .p-datepicker {
+        color: white;
+        background: #0f0f0f;
+        border: 0.6px solid rgba(240, 240, 240, 0.3);
+    }
+
+    .p-datepicker:not(.p-datepicker-inline) .p-datepicker-header {
+        color: white;
+        background: #0f0f0f;
+    }
+
+    .p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-month {
+        color: white;
+    }
+
+    .p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-year {
+        color: white;
+    }
+
+    .p-datepicker table td.p-datepicker-today>span.p-highlight {
+        color: #495057;
+    }
+
+    .p-datepicker .p-timepicker span {
+        font-size: 14px;
+    }
+
+    .p-calendar .p-datepicker {
+        min-width: 100%;
+        max-height: 495px;
+    }
+
+    .p-datepicker table td>span {
+        width: 20px;
+        font-size: 14px;
+        height: 20px;
+        border-radius: 50%;
+        transition: box-shadow 0.2s;
+        border: 1px solid transparent;
+    }
+
+    .p-datepicker table td>span.p-highlight {
+        color: #495057;
+        background: #E3F2FD;
+    }
+
+    .p-datepicker table td>span:focus {
+        outline: 0 none;
+        outline-offset: 0;
+        box-shadow: none;
+    }
+}

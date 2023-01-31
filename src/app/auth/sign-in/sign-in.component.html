@@ -1,0 +1,92 @@
+<div class="signup_container">
+  <div class="signup_card">
+    <div>
+      <div class="logo_body">
+        <img src="../../../assets/images/upriselogo.png" />
+      </div>
+      <br />
+      <div class="col-12" style="height: 85px; margin-bottom: 5px">
+        <app-input-text
+          [formGroup]="signinform"
+          [name]="'email'"
+          [placeholder]="'Enter your email or username'"
+          [label]="'Email or username'"
+          [type]="'text'"
+          [icon]="'pi pi-envelope'"
+          [iconpadding]="'true'"
+          [error]="
+            inputRequiredValidation(signinform, 'email')
+              ? 'Username or Email is required.'
+              : errorList['']
+          "
+        >
+        </app-input-text>
+      </div>
+      <div class="col-12" style="height: 85px">
+        <app-input-text
+          [formGroup]="signinform"
+          name="password"
+          [placeholder]="'Enter your Password'"
+          [label]="'Password'"
+          [type]="'password'"
+          [icon]="'pi pi-unlock'"
+          [error]="
+            inputRequiredValidation(signinform, 'password')
+              ? 'Passsword is required.'
+              : errorList['']
+          "
+        >
+        </app-input-text>
+      </div>
+      <br />
+      <div class="grid">
+        <div
+          class="col-6 terms_conditions"
+          style="display: flex; font-size: 12px"
+        >
+          <div>
+            <p-checkbox
+              [binary]="true"
+              [(ngModel)]="checked"
+              inputId="binary"
+            ></p-checkbox>
+          </div>
+          <div
+            style="margin-left: 3px"
+            class="font"
+            style="font-size: 16px; margin-left: 3px; margin-top: -2px"
+          >
+            Remember me
+          </div>
+        </div>
+        <div class="col-6">
+          <div style="text-align: right; margin-right: 9px">
+            <a class="fogotpassword" routerLink="/auth/forgot"
+              >Forgot password?</a
+            >
+          </div>
+        </div>
+      </div>
+      <br />
+      <div class="submit_button" style="text-align: center">
+        <app-button
+          [type]="'submit'"
+          (submitForm)="submit()"
+          [label]="'LOGIN'"
+          [disabled]="this.signinform.invalid"
+        ></app-button>
+      </div>
+
+      <div class="for_signup" style="text-align: center; margin-top: 20px">
+        <p class="paragraphTerms" style="font-family: Oswald !important">
+          Don't have an account?
+          <span class="terms" style="font-size: 16px; margin-left: 3px">
+            <a style="color: #dcf763" routerLink="/auth/signup"
+              >Signup as an artist</a
+            ></span
+          >
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
