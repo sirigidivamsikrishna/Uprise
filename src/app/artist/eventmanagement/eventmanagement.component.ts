@@ -82,6 +82,8 @@ export class EventmanagementComponent {
   }
   openmodel() {}
   searchClear() {
+    console.log('git');
+
     this.spinner.show();
     this.search.patchValue({
       search: '',
