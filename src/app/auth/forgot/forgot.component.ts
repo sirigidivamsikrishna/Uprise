@@ -5,16 +5,25 @@ import {
   FormBuilder,
   Validators,
 } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/shared/services/auth service/auth.service';
+import {
+  PatternValidation,
+  RequiredValidation,
+} from 'src/app/shared/validations/validations';
 @Component({
   selector: 'app-forgot',
   templateUrl: './forgot.component.html',
   styleUrls: ['./forgot.component.scss'],
 })
 export class ForgotComponent implements OnInit {
-  errorList: any = '';
+  errorList: string = '';
   forgotform: FormGroup;
-  constructor(private fb: FormBuilder, private auth: AuthService) {
+  constructor(
+    private fb: FormBuilder,
+    private auth: AuthService,
+    private toast: ToastrService
+  ) {
     this.forgotform = this.fb.group({
       email: [
         '',
@@ -32,29 +41,16 @@ export class ForgotComponent implements OnInit {
 
   submit() {
     let data = this.forgotform.value;
-    this.auth.forgot(data).subscribe(
-      (res) => {
-        console.log(res);
-      },
-      (err) => {
-        console.log(err.error);
-      }
-    );
-    this.forgotform.reset();
+    this.auth.forgot(data).subscribe((res) => {
+      this.toast.success(res['message']);
+      this.forgotform.reset();
+    });
   }
   inputRequiredValidation(forgotform: FormGroup, type: string): boolean {
-    return (
-      (forgotform.get(type).touched || forgotform.get(type).dirty) &&
-      forgotform.get(type)?.errors !== null &&
-      forgotform.get(type)?.errors.required
-    );
+    return RequiredValidation(forgotform, type);
   }
 
   inputPatternValidation(forgotForm: FormGroup, type: string): boolean {
-    return (
-      (forgotForm.get(type)?.touched || forgotForm.get(type)?.dirty) &&
-      forgotForm.get(type)?.errors !== null &&
-      forgotForm.get(type)?.errors.pattern
-    );
+    return PatternValidation(forgotForm, type);
   }
 }

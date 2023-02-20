@@ -8,6 +8,7 @@
       <div class="header_right grid">
         <div class="avatar" (click)="op.toggle($event)">
           <img
+            style="cursor: pointer"
             class="avatar_image"
             [src]="useravatar ? useravatar : defaultavatar"
           />
@@ -131,8 +132,14 @@
                 label="Save"
                 (click)="save()"
                 [type]="'submit'"
+                [loading]="buttonloader"
                 class="modelSaveButton"
-                [disabled]="changePasswordForm.invalid"
+                [disabled]="
+                  changePasswordForm.invalid ||
+                  correctPassword ||
+                  newPassword ||
+                  patternvalidation
+                "
               ></p-button>
             </div>
           </div>

@@ -3,20 +3,29 @@ import { ToastrService } from 'ngx-toastr';
 import { ArtistService } from 'src/app/shared/services/artist service/artist.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import {
+  addBandMemberData,
+  bandDetails,
+  bandGallery,
+  bandMembers,
+} from 'src/app/shared/interface/interface';
+import {
+  PatternValidation,
+  RequiredValidation,
+} from 'src/app/shared/validations/validations';
 @Component({
   selector: 'app-bandprofile',
   templateUrl: './bandprofile.component.html',
   styleUrls: ['./bandprofile.component.scss'],
 })
 export class BandprofileComponent {
-  imageurls: any[] = [];
-  selectedBandMember: any;
-  filteredBandMembers: any[] = [];
+  filteredBandMembers: addBandMemberData[] = [];
   editPosterAction: boolean = false;
   uploadimageSrc: string = '';
   thumbnail: any;
   bandId: string;
-  bandDetails: any;
+  bandDetails: { band: bandDetails };
   bandLogo: string = '';
   bandDescription: string;
   joined: string;
@@ -24,11 +33,11 @@ export class BandprofileComponent {
   bandDescriptionEditing: string;
   editDescriptionModalAction: boolean = false;
   bandDescriptionCount: number;
-  bandMembersList: any[];
+  bandMembersList: bandMembers[];
   addBandMemberModelAction: boolean = false;
-  bandGallery: any[];
+  bandGallery: bandGallery[];
   galleryUploadAction: boolean = false;
-  uploadBinaryGalleryImage: any[] = [];
+  uploadBinaryGalleryImage: File[] = [];
   galleryButtonsViewAction: boolean = false;
   checkBoxArray: number[] = [];
   galleryUploadedImages: any[] = [];
@@ -37,6 +46,14 @@ export class BandprofileComponent {
   bandMembersForm: FormGroup;
   activeIndex: number = 0;
   bandgalleryGalleriaAction: boolean = false;
+  bandProfileImageEditApi: Subscription;
+  uploadGalleryImagesApi: Subscription;
+  posterButton: boolean = false;
+  descriptionButton: boolean = false;
+  addBandMemberButton: boolean = false;
+  uploadImageButton: boolean = false;
+  deleteButton: boolean = false;
+  validEmail: boolean = false;
   responsiveOptions: { breakpoint: string; numVisible: number }[] = [
     {
       breakpoint: '1024px',
@@ -58,7 +75,10 @@ export class BandprofileComponent {
     private fb: FormBuilder
   ) {
     this.bandMembersForm = this.fb.group({
-      email: ['', [Validators.required]],
+      email: [
+        '',
+        [Validators.required, Validators.pattern('^(?=.*[a-zA-Z]).+$')],
+      ],
     });
   }
   ngOnInit(): void {
@@ -79,6 +99,15 @@ export class BandprofileComponent {
       this.bandGallery = res['data'].bandGallery;
       this.spinner.hide();
     });
+  }
+  // Required Error Messages
+  inputRequiredValidation(bandMemberForm: FormGroup, type: string): boolean {
+    return RequiredValidation(bandMemberForm, type);
+  }
+  // patternValidation
+  inputPatternValidation(bandMemberForm, type): boolean {
+    this.validEmail = PatternValidation(bandMemberForm, type);
+    return this.validEmail;
   }
   getGalleryImagesRefresh() {
     this.arist.bandGallery(this.bandId).subscribe((res) => {
@@ -105,6 +134,7 @@ export class BandprofileComponent {
         this.uploadimageSrc = reader.result as string;
       };
     }
+    event.target.value = '';
   }
   bandProfileImageUpload() {
     this.uploadimageSrc = this.bandLogo;
@@ -115,23 +145,27 @@ export class BandprofileComponent {
     this.thumbnail = '';
     this.uploadimageSrc = '';
   }
-  saveEvent() {
+  editPosterFunction() {
+    this.posterButton = true;
     const formData = new FormData();
     formData.append('title', this.bandTitle);
     formData.append('bandId', this.bandId);
     formData.append('description', this.bandDescription);
     formData.append('logo', this.thumbnail);
-
-    this.arist.editBand(formData).subscribe((res) => {
-      this.toast.success(res['message']);
-      this.editPosterAction = false;
-      this.getBandDetailsRefresh();
-    });
+    this.bandProfileImageEditApi = this.arist
+      .editBand(formData)
+      .subscribe((res) => {
+        this.posterButton = false;
+        this.toast.success(res['message']);
+        this.editPosterAction = false;
+        this.getBandDetailsRefresh();
+      });
   }
   bandModalClose() {
     this.uploadimageSrc = '';
     this.thumbnail = '';
     this.editPosterAction = false;
+    this.bandProfileImageEditApi?.unsubscribe();
   }
   editDescriptionModal() {
     this.editDescriptionModalAction = true;
@@ -150,6 +184,7 @@ export class BandprofileComponent {
     this.editDescriptionModalAction = false;
   }
   bandDescriptionSave() {
+    this.descriptionButton = true;
     const formData = new FormData();
     formData.append('title', this.bandTitle);
     formData.append('bandId', this.bandId);
@@ -157,6 +192,7 @@ export class BandprofileComponent {
     formData.append('logo', this.bandLogo);
     this.arist.editBand(formData).subscribe((res) => {
       this.toast.success(res['message']);
+      this.descriptionButton = false;
       this.editDescriptionModalAction = false;
       this.getBandDetailsRefresh();
     });
@@ -166,22 +202,29 @@ export class BandprofileComponent {
     this.bandMembersForm.reset();
   }
   addBandMemberInvite() {
-    let object = {
-      bandId: this.bandId,
-      email: this.bandMembersForm.value.email.email,
-    };
-    this.arist.bandMemberInvite(object).subscribe((res) => {
-      this.toast.success(res['message']);
-      this.addBandMemberModelAction = false;
-      this.bandMembersForm.reset();
-    });
+    if (this.bandMembersForm.invalid) {
+    } else {
+      this.addBandMemberButton = true;
+      let object = {
+        bandId: this.bandId,
+        email: this.bandMembersForm.value.email.email,
+      };
+      this.arist.bandMemberInvite(object).subscribe((res) => {
+        this.toast.success(res['message']);
+        this.addBandMemberButton = false;
+        this.addBandMemberModelAction = false;
+        this.bandMembersForm.reset();
+      });
+    }
   }
   addBandMemberCancel() {
+    this.addBandMemberButton = false;
     this.bandMembersForm.reset();
     this.addBandMemberModelAction = false;
   }
   uploadImageModel() {
     this.galleryUploadAction = true;
+    this.galleryUploadedImages = [];
     this.uploadBinaryGalleryImage = [];
   }
   checkBoxSelect(id: number, event) {
@@ -243,8 +286,10 @@ export class BandprofileComponent {
       reader.onload = (e) => {
         this.galleryUploadedImages.push(e.target.result);
         this.uploadBinaryGalleryImage.push(file);
+        console.log(this.galleryUploadedImages);
       };
     }
+    event.target.value = '';
   }
   removeGalleryImage(id) {
     this.galleryUploadedImages.splice(id, 1);
@@ -252,30 +297,36 @@ export class BandprofileComponent {
   }
   cancelUploadImage() {
     this.galleryUploadAction = false;
-
     this.uploadBinaryGalleryImage = [];
     this.galleryUploadedImages = [];
+    this.uploadGalleryImagesApi?.unsubscribe();
   }
   uploadImageUpload() {
+    this.uploadImageButton = true;
     const formData = new FormData();
     for (let index = 0; index < this.uploadBinaryGalleryImage.length; index++) {
       formData.append('uploadedImages', this.uploadBinaryGalleryImage[index]);
     }
     formData.append('bandId', this.bandId);
-    this.arist.uploadGalleryImage(formData).subscribe((res) => {
-      this.galleryUploadAction = false;
-      this.uploadBinaryGalleryImage = [];
-      this.getGalleryImagesRefresh();
-      this.toast.success(res['message']);
-      this.galleryUploadedImages = [];
-    });
+    this.uploadGalleryImagesApi = this.arist
+      .uploadGalleryImage(formData)
+      .subscribe((res) => {
+        this.uploadImageButton = false;
+        this.galleryUploadAction = false;
+        this.uploadBinaryGalleryImage = [];
+        this.getGalleryImagesRefresh();
+        this.toast.success(res['message']);
+        this.galleryUploadedImages = [];
+      });
   }
   deleteImagesConfirm() {
+    this.deleteButton = true;
     let object = {
       imagesId: this.checkBoxArray,
     };
     this.arist.deleteGalleryImages(this.bandId, object).subscribe((res) => {
       this.toast.success(res['message']);
+      this.deleteButton = false;
       this.getGalleryImagesRefresh();
       this.checkBoxArray = [];
       this.deleteImagesModalAction = false;
@@ -299,6 +350,8 @@ export class BandprofileComponent {
   filterbandmembers(event) {
     let query = event.query;
     this.arist.getBandMembers(this.bandId, query).subscribe((res) => {
+      console.log(res['data']);
+
       this.filteredBandMembers = res['data'];
     });
   }

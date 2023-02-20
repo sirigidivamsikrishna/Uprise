@@ -16,7 +16,7 @@
           [iconpadding]="'true'"
           [error]="
             inputRequiredValidation(signinform, 'email')
-              ? 'Username or Email is required.'
+              ? 'Username or email is required.'
               : errorList['']
           "
         >
@@ -73,7 +73,8 @@
           [type]="'submit'"
           (submitForm)="submit()"
           [label]="'LOGIN'"
-          [disabled]="this.signinform.invalid"
+          [loader]="signinButton"
+          [disabled]="this.signinform.invalid || signinButton"
         ></app-button>
       </div>
 

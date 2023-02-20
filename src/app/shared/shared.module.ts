@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { InputTextComponent } from './components/input-text/input-text.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ButtonComponent } from './components/button/button.component';
-
 import { PrimengModule } from './primeng/primeng.module';
 import { HttpClientModule } from '@angular/common/http';
 import { InputLocationComponent } from './components/input-location/input-location.component';
@@ -14,6 +13,7 @@ import { DatePipe } from './pipes/date.pipe';
 import { AutocompleteComponent } from './components/autocomplete/autocomplete.component';
 import { MinutesPipe } from './pipes/minutes.pipe';
 import { DatepickerComponent } from './components/datepicker/datepicker.component';
+// import { HttpConfigInterceptor } from '../interceptor/http-config.interceptor';
 @NgModule({
   declarations: [
     InputTextComponent,

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import {
   HttpRequest,
   HttpHandler,
@@ -10,18 +10,20 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { catchError, Observable, throwError } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../shared/services/auth service/auth.service';
+import { ArtistService } from '../shared/services/artist service/artist.service';
+import { environment } from 'src/environments/environment';
 @Injectable()
 export class HttpConfigInterceptor implements HttpInterceptor {
   token: string;
+
   constructor(
     private toast: ToastrService,
     private spinner: NgxSpinnerService,
-    private auth: AuthService
+    private auth: AuthService,
+    private artist: ArtistService
   ) {}
   ngOnInit() {
-    this.spinner.show();
-    // this.token = localStorage.getItem('accessToken');
-    // console.log(localStorage.getItem('accessToken'));
+    // this.spinner.show();
   }
   intercept(
     request: HttpRequest<any>,
@@ -29,15 +31,17 @@ export class HttpConfigInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<unknown>> {
     const token = this.auth.getToken();
     let headers = request.headers
-      .set('client-id', '437920819fa89d19abe380073d28839c')
-      .set('client-secret', '28649120bdf32812f433f428b15ab1a1')
+      .set('client-id', environment.CLIENT_ID)
+      .set('client-secret', environment.cLIENT_SECRET)
       .set('Authorization', 'Bearer ' + token);
 
     const newRequest = request.clone({ headers });
     return next.handle(newRequest).pipe(
       catchError((error: HttpErrorResponse) => {
+        this.auth.errorEmitter.emit(true);
+        this.artist.errorLoader.emit(true);
         let ErrorMessage = this.ErrorToaster(error);
-        this.spinner.hide();
+        // this.spinner.hide();
         return throwError(ErrorMessage);
       })
     );

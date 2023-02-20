@@ -1,0 +1,49 @@
+::ng-deep {
+  .p-error {
+    color: red;
+  }
+
+  .p-paginator {
+    background: #000000;
+    color: #f0f0f0;
+    border: solid #e9ecef;
+    border-width: 0;
+    border-radius: 3px;
+  }
+
+  .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+    background: #202020;
+    border-color: #202020;
+    color: #f1ffff;
+    border-radius: 3px;
+    // min-width: 45px;
+    // min-height: 45px;
+    // max-height: 45px;
+  }
+
+  .p-paginator .p-dropdown {
+    background: #202020;
+    border: none;
+    border-radius: 3px;
+    box-shadow: none;
+    height: 40px;
+    min-height: 45px;
+    max-height: 45px;
+  }
+
+  .p-paginator .p-paginator-pages .p-paginator-page:not(.p-highlight):hover,
+  .p-paginator .p-paginator-next:not(.p-disabled):not(.p-highlight):hover,
+  .p-paginator .p-paginator-last:not(.p-disabled):not(.p-highlight):hover,
+  .p-paginator .p-paginator-prev:not(.p-disabled):not(.p-highlight):hover,
+  .p-paginator .p-paginator-first:not(.p-disabled):not(.p-highlight):hover {
+    background: #202020;
+    border-color: transparent;
+    color: #f0f0f0;
+    border-radius: 3px;
+  }
+  .p-paginator-left-content {
+    color: #6c757d !important;
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+  }
+}

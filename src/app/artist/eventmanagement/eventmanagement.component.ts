@@ -3,6 +3,16 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ArtistService } from 'src/app/shared/services/artist service/artist.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { __values } from 'tslib';
+import { Observable } from 'rxjs/internal/Observable';
+import { debounce } from 'lodash';
+import { Subscription } from 'rxjs';
+import { eventData } from 'src/app/shared/interface/interface';
+import {
+  PatternValidation,
+  RequiredValidation,
+} from 'src/app/shared/validations/validations';
 @Component({
   selector: 'app-eventmanagement',
   templateUrl: './eventmanagement.component.html',
@@ -12,7 +22,7 @@ export class EventmanagementComponent {
   search: FormGroup;
   searchText: string = '';
   crossIcon: Boolean = true;
-  eventsData: any = [];
+  eventsData: eventData[] = [];
   displaydeleteModal: boolean = false;
   deleteId: number;
   bandId: string;
@@ -23,21 +33,27 @@ export class EventmanagementComponent {
   modalHeader: string = 'Upload Event';
   eventsForm: FormGroup;
   uploadimageSrc: string;
-  errorList: any = '';
+  errorList: string = '';
   presentDate: Date;
-  address: any;
-  latitude: any;
-  longitude: any;
+  address: string;
+  latitude: string;
+  longitude: string;
   thumbnail: string;
   editEventId: number;
-  dummyDate: any;
+  todayPresentDate: string;
   searchTextCross: string = '';
+  uploadEventApi: Subscription;
+  updateEventApi: Subscription;
+  venueCheck: boolean = false;
+  eventDescriptionCount: number = 255;
+  eventButton: boolean = false;
   constructor(
     private arist: ArtistService,
     private fb: FormBuilder,
     private toast: ToastrService,
     private spinner: NgxSpinnerService
   ) {
+    this.searchtable = debounce(this.searchtable, 1500);
     this.search = this.fb.group({ search: [''] });
     this.eventsForm = this.fb.group({
       title: [
@@ -53,25 +69,18 @@ export class EventmanagementComponent {
   }
   ngOnInit(): void {
     this.spinner.show();
-    this.dummyDate = new Date().toISOString();
+    this.todayPresentDate = new Date().toISOString();
     this.presentDate = new Date();
-    this.totalevents = this.eventsData.length;
     let bandData = JSON.parse(localStorage.getItem('band'));
     this.bandId = bandData.id;
-    this.arist
-      .getEvents(this.bandId, this.currentPage, this.perpage)
-      .subscribe((res) => {
-        this.eventsData = res['data'];
-        this.totalevents = this.eventsData.length;
-        this.spinner.hide();
-      });
+    this.gettingEvents();
   }
-  refresh() {
+  gettingEvents() {
     this.arist
-      .getEvents(this.bandId, this.currentPage, this.perpage)
+      .getEvents(this.bandId, this.currentPage, this.perpage, this.searchText)
       .subscribe((res) => {
         this.eventsData = res['data'];
-        this.totalevents = this.eventsData.length;
+        this.totalevents = parseInt(this.eventsData[0].totalCount);
         this.spinner.hide();
       });
   }
@@ -82,28 +91,20 @@ export class EventmanagementComponent {
   }
   openmodel() {}
   searchClear() {
-    console.log('git');
-
     this.spinner.show();
     this.search.patchValue({
       search: '',
     });
     this.searchTextCross = '';
-    this.refresh();
+    this.searchText = '';
+    this.gettingEvents();
   }
   searchtable(event) {
     this.searchTextCross = event.target.value;
-    setTimeout(() => {
-      this.searchText = event.target.value;
-      this.spinner.show();
-      this.arist
-        .getEvents(this.bandId, this.currentPage, this.perpage, this.searchText)
-        .subscribe((res) => {
-          this.eventsData = res['data'];
-          this.spinner.hide();
-          this.totalevents = this.eventsData.length;
-        });
-    }, 2000);
+    this.searchText = event.target.value;
+    this.currentPage = 1;
+    this.spinner.show();
+    this.gettingEvents();
   }
   editevent(item) {
     this.clearModal();
@@ -127,6 +128,7 @@ export class EventmanagementComponent {
       endDate: endTime,
       description: event.description === 'null' ? '' : event.description,
     });
+    this.eventDescriptionCount = 255 - this.eventsForm.value.description.length;
   }
   deleteevent(id) {
     this.displaydeleteModal = true;
@@ -143,15 +145,15 @@ export class EventmanagementComponent {
 
     this.arist.deleteEvent(this.deleteId, object).subscribe((res) => {
       this.toast.success(`${res['message']}`);
-      this.refresh();
+      this.gettingEvents();
     });
     this.displaydeleteModal = false;
-    // this.displaydeleteModal = false;
   }
   paginate(pageData) {
     this.currentPage = pageData.page + 1;
     this.perpage = pageData.rows;
-    this.refresh();
+    this.gettingEvents();
+    this.spinner.show();
   }
   Imageupload(event) {
     this.thumbnail = event.target.files[0];
@@ -163,33 +165,64 @@ export class EventmanagementComponent {
         this.uploadimageSrc = reader.result as string;
       };
     }
+    event.target.value = '';
   }
   removeImg() {
     this.uploadimageSrc = '';
     this.thumbnail = '';
   }
+
   Address(event) {
     this.address = event.name + ',' + event.formatted_address;
+    this.eventsForm.patchValue({
+      venue: this.address,
+    });
     this.latitude = event.geometry.location.lat();
     this.longitude = event.geometry.location.lng();
   }
   // validations
   inputRequiredValidation(eventsForm: FormGroup, type: string): boolean {
-    return (
-      (eventsForm.get(type).touched || eventsForm.get(type).dirty) &&
-      eventsForm.get(type)?.errors !== null &&
-      eventsForm.get(type)?.errors.required
-    );
+    return RequiredValidation(eventsForm, type);
   }
   inputPatternValidation(eventsForm: FormGroup, type: string): boolean {
-    return (
+    return PatternValidation(eventsForm, type);
+  }
+
+  // city checking validation
+  venueChecking(eventsForm, type) {
+    this.venueCheck =
       (eventsForm.get(type)?.touched || eventsForm.get(type)?.dirty) &&
-      eventsForm.get(type)?.errors !== null &&
-      eventsForm.get(type)?.errors.pattern
-    );
+      this.address != this.eventsForm.value.venue;
+    return this.venueCheck;
+  }
+  dateTimeValidationChecking(eventsForm, startDate, endDate) {
+    let difference =
+      eventsForm.get(endDate)?.value - eventsForm.get(startDate)?.value;
+    if (
+      (eventsForm.get(endDate)?.touched || eventsForm.get(endDate)?.dirty) &&
+      eventsForm.get(endDate)?.value < eventsForm.get(startDate)?.value
+    ) {
+      return true;
+    }
+    if (
+      (eventsForm.get(endDate)?.touched || eventsForm.get(endDate)?.dirty) &&
+      difference <= 2700000
+    ) {
+      return true;
+    }
   }
   eventModalClose() {
-    this.uploadEventModelAction = false;
+    if (this.modalHeader === 'Upload Event') {
+      this.uploadEventModelAction = false;
+      this.clearModal();
+      this.uploadEventApi?.unsubscribe();
+    }
+
+    if (this.modalHeader === 'Edit Event') {
+      this.uploadEventModelAction = false;
+      this.clearModal();
+      this.updateEventApi?.unsubscribe();
+    }
   }
   clearModal() {
     this.eventsForm.reset();
@@ -198,10 +231,14 @@ export class EventmanagementComponent {
     this.longitude = '';
     this.uploadimageSrc = '';
   }
+  eventManagementDescriptionCount() {
+    this.eventDescriptionCount = 255 - this.eventsForm.value.description.length;
+  }
+
   saveEvent() {
-    this.spinner.show();
     if (this.eventsForm.invalid) {
     } else {
+      this.eventButton = true;
       if (this.modalHeader === 'Upload Event') {
         const Data = this.eventsForm.value;
         const formData = new FormData();
@@ -214,13 +251,17 @@ export class EventmanagementComponent {
         formData.append('latitude', this.latitude);
         formData.append('longitude', this.longitude);
         formData.append('bandId', this.bandId);
-        this.arist.uploadEvent(formData).subscribe((res) => {
-          this.toast.success(`${res['message']}`);
-          this.refresh();
-          this.uploadEventModelAction = false;
-          this.clearModal();
-          this.spinner.hide();
-        });
+        this.uploadEventApi = this.arist
+          .uploadEvent(formData)
+          .subscribe((res) => {
+            this.eventButton = false;
+            this.toast.success(`${res['message']}`);
+            this.spinner.show();
+            this.gettingEvents();
+            this.uploadEventModelAction = false;
+            this.clearModal();
+            this.thumbnail = '';
+          });
       }
 
       if (this.modalHeader === 'Edit Event') {
@@ -235,13 +276,17 @@ export class EventmanagementComponent {
         formData.append('latitude', this.latitude);
         formData.append('longitude', this.longitude);
         formData.append('bandId', this.bandId);
-        this.arist.updateEvent(this.editEventId, formData).subscribe((res) => {
-          this.toast.success(`${res['message']}`);
-          this.refresh();
-          this.spinner.hide();
-          this.uploadEventModelAction = false;
-          this.clearModal();
-        });
+        this.updateEventApi = this.arist
+          .updateEvent(this.editEventId, formData)
+          .subscribe((res) => {
+            this.eventButton = false;
+            this.toast.success(`${res['message']}`);
+            this.gettingEvents();
+            this.spinner.show();
+            this.uploadEventModelAction = false;
+            this.clearModal();
+            this.thumbnail = '';
+          });
       }
     }
   }

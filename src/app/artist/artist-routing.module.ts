@@ -10,6 +10,7 @@ const routes: Routes = [
     path: '',
     component: ArtistComponent,
     children: [
+      { path: '', redirectTo: 'songs', pathMatch: 'full' },
       { path: 'songs', component: SongsmanagementComponent },
       { path: 'events', component: EventmanagementComponent },
       { path: 'bandprofile', component: BandprofileComponent },
