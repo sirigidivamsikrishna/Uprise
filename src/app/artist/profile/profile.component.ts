@@ -24,6 +24,7 @@ export class ProfileComponent {
   profileForm: FormGroup;
   errorList: string = '';
   profileImageclick: string = '';
+  borderImageId: number;
   saveButton: boolean = false;
   avatarID: number;
   avatarSelectedImage: string = '';
@@ -54,8 +55,10 @@ export class ProfileComponent {
   gettingUserData() {
     this.artist.userData().subscribe((res) => {
       this.userData = res['data'];
+
       this.ProfilePic = res['data'].avatar;
       this.selectedAvatarId = this.userData.avatarId;
+      this.avatarID = this.userData.avatarId;
       this.profileForm.patchValue({
         email: res['data'].email,
         userName: res['data'].userName,
@@ -106,6 +109,7 @@ export class ProfileComponent {
   avatarCancel() {
     this.profileImageclick = this.avatarSelectedImage;
     this.displayProfileModal = false;
+    this.avatarID = this.userData.avatarId;
   }
   removeprofilepic() {
     this.profileImageclick = null;

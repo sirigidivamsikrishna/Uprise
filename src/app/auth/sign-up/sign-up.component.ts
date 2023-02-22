@@ -116,11 +116,11 @@ export class SignUpComponent implements OnInit {
     this.avatarSelectedImage = this.profileImageclick;
     this.selectedAvatarId = this.avatarID;
     this.displayModal = false;
-    console.log(this.selectedAvatarId, 'selectedAvatarId');
   }
   avatarCancel() {
     this.profileImageclick = this.avatarSelectedImage;
     this.displayModal = false;
+    this.avatarID = this.selectedAvatarId;
   }
   removeprofilepic() {
     this.profileImageclick = null;

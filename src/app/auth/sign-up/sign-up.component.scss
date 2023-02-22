@@ -7,7 +7,7 @@ font {
 .signup_container {
   background-image: url(./../../../assets/images/bg-img-main.png);
   background-size: cover;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -20,6 +20,7 @@ font {
   border-radius: 2px;
   width: 930px;
   height: fit-content;
+  max-height: 100% !important;
   padding: 30px 35px;
 }
 .logo_body {
@@ -209,9 +210,9 @@ font {
   .modal_view_content {
     padding: 0px 50px;
   }
-  // .bordercolor{
-  // border: 2px solid $primary;
-  // }
+  .bordercolor{
+  border: 2px solid $primary;
+  }
 }
 
 ::-webkit-scrollbar {

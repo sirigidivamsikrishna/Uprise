@@ -9,6 +9,11 @@ import { Router } from '@angular/router';
 import { Toast, ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { ArtistService } from 'src/app/shared/services/artist service/artist.service';
+import {
+  PasswordValidation,
+  PatternValidation,
+  RequiredValidation,
+} from 'src/app/shared/validations/validations';
 
 @Component({
   selector: 'app-header',
@@ -79,20 +84,12 @@ export class HeaderComponent {
     changePasswordForm: FormGroup,
     type: string
   ): boolean {
-    this.correctPassword =
-      (changePasswordForm.get(type).touched ||
-        changePasswordForm.get(type).dirty) &&
-      changePasswordForm.get(type)?.errors !== null &&
-      changePasswordForm.get(type)?.errors.required;
+    this.correctPassword = RequiredValidation(changePasswordForm, type);
     return this.correctPassword;
   }
   // pattern Error Messages
   inputPatternValidation(changePasswordForm: FormGroup, type: string): boolean {
-    this.patternvalidation =
-      (changePasswordForm.get(type)?.touched ||
-        changePasswordForm.get(type)?.dirty) &&
-      changePasswordForm.get(type)?.errors !== null &&
-      changePasswordForm.get(type)?.errors.pattern;
+    this.patternvalidation = PatternValidation(changePasswordForm, type);
     return this.patternvalidation;
   }
   // Password checking Validation
@@ -101,11 +98,11 @@ export class HeaderComponent {
     password: string,
     confirmpassword: string
   ): boolean {
-    this.newPassword =
-      (changePasswordForm.get(confirmpassword).touched ||
-        changePasswordForm.get(confirmpassword).dirty) &&
-      changePasswordForm.get(password)?.value !==
-        changePasswordForm.get(confirmpassword)?.value;
+    this.newPassword = PasswordValidation(
+      changePasswordForm,
+      password,
+      confirmpassword
+    );
     return this.newPassword;
   }
   // new Password Validation
@@ -117,8 +114,8 @@ export class HeaderComponent {
     return (
       (changePasswordForm.get(password).touched ||
         changePasswordForm.get(password).dirty) &&
-      changePasswordForm.get(password)?.value ==
-        changePasswordForm.get(oldpassword)?.value
+      changePasswordForm.get(oldpassword)?.value ==
+        changePasswordForm.get(password)?.value
     );
   }
   close() {

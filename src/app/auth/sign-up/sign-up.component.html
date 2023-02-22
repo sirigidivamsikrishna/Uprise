@@ -264,7 +264,7 @@
             height="80px"
             (click)="avatarclick(item)"
             class="model_avatar_images"
-            [ngClass]="profileImageclick ? 'bordercolor' : 'bordercolornone'"
+            [ngClass]="avatarID == item.id ? 'bordercolor' : 'bordercolornone'"
             src="{{ item.url }}"
           />
         </div>
