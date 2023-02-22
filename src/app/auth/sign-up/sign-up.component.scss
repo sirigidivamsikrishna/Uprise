@@ -1,7 +1,7 @@
 @import "../../../colors.scss";
 
 font {
-  font-family: Oswald !important;
+  font-family: $font !important;
 }
 
 .signup_container {
@@ -60,7 +60,7 @@ font {
 }
 .grid {
   display: flex;
-  font-family: Oswald !important;
+  font-family: $font !important;
   flex-wrap: wrap;
   margin-right: -0.5rem;
   margin-left: -0.5rem;
@@ -71,7 +71,7 @@ font {
   color: $primary !important;
 }
 .terms_conditions {
-  font-family: Oswald !important;
+  font-family: $font !important;
   margin-bottom: 15px;
   margin-top: 15px;
 }
@@ -79,7 +79,7 @@ font {
   color: $primary;
 }
 .for_signup {
-  font-family: Oswald !important;
+  font-family: $font !important;
 }
 ::ng-deep {
   .p-error {
@@ -125,7 +125,7 @@ font {
 
 .avatarModelDivision {
   ::ng-deep .p-component {
-    font-family: Oswald !important;
+    font-family: $font !important;
   }
   .modalProfilepic {
     border: 3px solid #ffff;
@@ -271,7 +271,7 @@ font {
       color: rgb(255, 255, 255);
       width: 100%;
       height: 38px;
-      font-family: Oswald !important;
+      font-family: $font !important;
       font-size: 14px !important;
       font-weight: 400;
       padding-left: 30px;

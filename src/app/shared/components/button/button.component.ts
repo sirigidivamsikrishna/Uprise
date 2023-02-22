@@ -11,7 +11,8 @@ export class ButtonComponent implements OnInit {
   @Input() type: '';
   @Input() buttonicon: '';
   @Output() submitForm = new EventEmitter<any>();
-  @Input() disabled = '';
+  @Input() disabled: boolean = false;
+  @Input() loader: '';
 
   ngOnInit(): void {}
   submit() {

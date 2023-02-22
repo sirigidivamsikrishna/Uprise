@@ -8,6 +8,9 @@ import {
 import { AuthService } from 'src/app/shared/services/auth service/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
+import { RequiredValidation } from 'src/app/shared/validations/validations';
 @Component({
   selector: 'app-sign-in',
   templateUrl: './sign-in.component.html',
@@ -15,9 +18,9 @@ import { Router } from '@angular/router';
 })
 export class SignInComponent implements OnInit {
   checked: Boolean = false;
-  errorList: any = '';
+  errorList: string = '';
   signinform: FormGroup;
-  userData: any;
+  signinButton: boolean;
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
@@ -41,38 +44,60 @@ export class SignInComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.auth.errorEmitter.subscribe((res) => {
+      console.log(res, 'hgc');
+      // this.signinButton = false;
+    });
     if (!!localStorage.getItem('accessToken')) {
       this.router.navigate(['/artist']);
     }
+    if (localStorage.getItem('object')) {
+      let object = JSON.parse(localStorage.getItem('object'));
+      this.signinform.patchValue({
+        email: window.atob(object.accessToken),
+        password: window.atob(object.refreshToken),
+      });
+      this.checked = true;
+    }
+  }
+
+  loadingButtonFunction() {
+    this.signinButton = false;
   }
   submit() {
+    this.signinButton = true;
     const Data = this.signinform.value;
-    this.auth.signin(Data).subscribe((res: any) => {
-      // this.userData = res.data.user;
+    this.auth.signin(Data)?.subscribe((res: any) => {
+      this.signinButton = false;
       if (this.checked == true) {
-        let string = JSON.stringify(Data);
-
-        // CryptoJS.AES.encrypt('Message', 'My Secret Passphrase');
-        localStorage.setItem('loginCreden', string);
+        let object = {
+          accessToken: window.btoa(Data.email),
+          refreshToken: window.btoa(Data.password),
+        };
+        localStorage.setItem('object', JSON.stringify(object));
+      } else {
+        localStorage.removeItem('object');
       }
-      this.toast.success(`${res['message']}`);
       let login = JSON.stringify(res);
       let band = JSON.stringify(res.data.user.bands[0]);
       localStorage.setItem('accessToken', res.data.accessToken);
       localStorage.setItem('login', login);
       localStorage.setItem('band', band);
-      let timer = setTimeout(() => {
-        this.router.navigate(['/artist']);
-      }, 2000);
+      this.router.navigate(['/artist']);
+      //  for opening in another page
+      // let url = this.router.serializeUrl(
+      //   this.router.createUrlTree(['/artist'])
+      // );
+      // window.open(url)
+      // or
+      //  window.open('/artist');
+
+      this.toast.success(`${res['message']}`);
     });
-    // this.checked = false;
   }
+  // Required Validations
   inputRequiredValidation(signinform: FormGroup, type: string): boolean {
-    return (
-      (signinform.get(type).touched || signinform.get(type).dirty) &&
-      signinform.get(type)?.errors !== null &&
-      signinform.get(type)?.errors.required
-    );
+    return RequiredValidation(signinform, type);
   }
 }

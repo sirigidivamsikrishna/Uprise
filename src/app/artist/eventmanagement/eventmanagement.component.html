@@ -51,7 +51,10 @@
       </ng-template>
       <ng-template pTemplate="body" let-event>
         <tr>
-          <td *ngIf="event.thumbnail == null">
+          <td
+            *ngIf="event.thumbnail == null"
+            style="width: 149px; max-width: 165px"
+          >
             <img
               src="../../../assets/images/band-pic.png"
               height="60px"
@@ -61,33 +64,67 @@
           <td *ngIf="event.thumbnail != null">
             <img src="{{ event.thumbnail }}" height="60px" width="60px" />
           </td>
-          <td>{{ event.eventName }}</td>
-          <td>
-            {{ event.location }}
+          <td style="max-width: 10vw; width: 230px">
+            <div
+              style="
+                width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+              "
+            >
+              {{ event.eventName }}
+            </div>
           </td>
-          <td>
+          <td style="max-width: 19vw !important; width: 230px">
+            <div
+              style="
+                width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+              "
+              pTooltip="{{ event.location }}"
+              tooltipPosition="bottom"
+            >
+              {{ event.location }}
+            </div>
+          </td>
+          <td style="width: 230px; max-width: 10vw">
             {{ event.startTime | date : "dd/MM/YY" }} -
             {{ event.endTime | date : "dd/MM/YY" }}
           </td>
-          <td>
-            <!-- {{ dummyDate }}
-            {{ event.startTime }} -->
+          <td style="width: 230px; max-width: 10vw">
             {{ event.startTime | date : "shortTime" }}
           </td>
-          <td class="actionicon">
-            <span [ngClass]="dummyDate > event.startTime ? 'disableicons' : ''">
+          <td class="actionicon" style="width: 230px; max-width: 10vw">
+            <span
+              [ngClass]="
+                todayPresentDate > event.startTime ? 'disableicons' : ''
+              "
+            >
               <i
-                (click)="dummyDate > event.startTime ? '' : editevent(event)"
+                (click)="
+                  todayPresentDate > event.startTime ? '' : editevent(event)
+                "
                 class="actionicon"
+                [ngClass]="
+                  todayPresentDate > event.startTime ? 'disableicons' : ''
+                "
                 style="cursor: pointer"
                 class="pi pi-pencil"
               ></i>
               &nbsp;
               <i
                 (click)="
-                  dummyDate > event.startTime ? '' : deleteevent(event.id)
+                  todayPresentDate > event.startTime
+                    ? ''
+                    : deleteevent(event.id)
                 "
                 class="actionicon"
+                [ngClass]="
+                  todayPresentDate > event.startTime ? 'disableicons' : ''
+                "
                 style="cursor: pointer"
                 class="pi pi-trash"
               ></i>
@@ -104,13 +141,29 @@
         </tr>
       </ng-template>
     </p-table>
+
+    <!-- Paginator -->
     <div *ngIf="totalevents > 0">
       <p-paginator
         [rows]="10"
         [totalRecords]="totalevents"
-        [rowsPerPageOptions]="[10, 50, 100]"
+        [rowsPerPageOptions]="[2, 10, 50, 100]"
         (onPageChange)="paginate($event)"
-      ></p-paginator>
+        [templateLeft]="leftSide"
+        #pagin
+      >
+      </p-paginator>
+      <ng-template #leftSide>
+        Showing {{ totalRecords < 1 ? 0 : pagin.first + 1 }} to
+        {{
+          totalevents > 0
+            ? pagin.rows + pagin.first <= totalevents
+              ? pagin.rows + pagin.first
+              : totalevents
+            : 0
+        }}
+        of {{ totalevents ? totalevents : 0 }} entries
+      </ng-template>
     </div>
   </div>
 </div>
@@ -242,6 +295,8 @@
                   [innerHTML]="
                     inputRequiredValidation(eventsForm, 'venue')
                       ? 'Venue is required'
+                      : venueChecking(eventsForm, 'venue')
+                      ? 'Enter valid city'
                       : '&nbsp;'
                   "
                 ></small>
@@ -281,18 +336,46 @@
               [error]="
                 inputRequiredValidation(eventsForm, 'endDate')
                   ? 'End date and time is required.'
+                  : dateTimeValidationChecking(
+                      eventsForm,
+                      'startDate',
+                      'endDate'
+                    )
+                  ? 'Event must be atleast 45 minutes.'
                   : errorList['']
               "
             ></app-datepicker>
           </div>
           <div class="col-6 py-0 my-0 inputtitleText">
-            <app-input-text
+            <!-- <app-input-text
               [name]="'description'"
               [label]="'Description'"
               [formGroup]="eventsForm"
               [placeholder]="'Enter description'"
               [type]="'text'"
-            ></app-input-text>
+            ></app-input-text> -->
+            <div [formGroup]="eventsForm" class="textAreaDescription">
+              <div class="col-12 p-0 labelNames" style="margin-bottom: 8px">
+                Description &nbsp;
+              </div>
+              <textarea
+                style="height: 80px"
+                formControlName="description"
+                [rows]="5"
+                [cols]="30"
+                maxlength="250"
+                (keyup)="eventManagementDescriptionCount()"
+                pInputTextarea
+                placeholder="Enter Description"
+                [autoResize]="true"
+              ></textarea>
+              <p class="info-msgs">
+                <i class="pi pi-info-circle"></i> &nbsp;
+                <span style="position: relative; top: -2px; left: -4px">
+                  Left {{ eventDescriptionCount }} Characters
+                </span>
+              </p>
+            </div>
           </div>
 
           <div class="col-8"></div>
@@ -311,8 +394,9 @@
                 label="Save"
                 (click)="saveEvent()"
                 [type]="'submit'"
+                [loading]="eventButton"
                 class="modelSaveButton"
-                [disabled]="eventsForm.invalid"
+                [disabled]="eventsForm.invalid || venueCheck"
               ></p-button>
             </div>
           </div>

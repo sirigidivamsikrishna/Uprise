@@ -1,7 +1,7 @@
 @import "../../../colors.scss";
 
 font {
-    font-family: Oswald !important;
+    font-family: $font !important;
 }
 
 .signup_container {
@@ -29,7 +29,7 @@ font {
     text-align: center;
 }
 .terms_conditions {
-    font-family: Oswald !important;
+    font-family: $font !important;
     // margin-bottom: 10px;
     padding-left: 17px;
 }
@@ -84,7 +84,7 @@ font {
 
 
 ::ng-deep .p-button {
-font-family: Oswald !important;
+font-family: $font !important;
     padding: 0.75rem 1.25rem;
     height: 37px;
     width: 150px !important;
@@ -95,7 +95,7 @@ font-family: Oswald !important;
     color: white;
         font-size: 16px;
         text-decoration: none;
-        font-family: Oswald !important;
+        font-family: $font !important;
 }
 .fogotpassword:hover{
     text-decoration: underline;

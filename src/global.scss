@@ -1,4 +1,3 @@
-@import "../../../colors.scss";
 .songs_management {
   background-color: #100b00;
   height: calc(100vh - 72px);
@@ -9,6 +8,7 @@
   .grid {
     margin: 0px;
   }
+
   .allsongsText {
     margin-top: 0px;
     padding-bottom: 7px;
@@ -16,6 +16,7 @@
     font-weight: 500;
     border-bottom: 3px solid $primary;
   }
+
   ::ng-deep {
     .p-button {
       width: 160px !important;
@@ -24,12 +25,14 @@
       font-size: 14px !important;
       // font-family: Oswald !important;
     }
+
     .textbox .p-inputtext {
       border: 2px solid #ccc !important;
       border-radius: 40px !important;
       width: 220px !important;
       background: #0f0f0f00 !important;
     }
+
     .textbox .p-input-icon-left > i:first-of-type {
       color: #ccc !important;
       margin-top: -5px;
@@ -48,13 +51,15 @@
       }
     }
   }
+
   .p-datatable {
     font-weight: 300 !important;
     // letter-spacing: 1px;
     font-size: 15px !important;
-    font-family: Oswald !important ;
+    font-family: Oswald !important;
     letter-spacing: 0.02em;
   }
+
   .p-datatable .p-datatable-thead > tr > th {
     text-align: center;
     padding: 15px;
@@ -65,14 +70,17 @@
     background: #333333;
     box-shadow: none !important;
   }
+
   .p-table {
     color: white;
   }
+
   .p-datatable .p-datatable-tbody > tr {
     background: #202020;
     text-align: center;
     color: white;
   }
+
   .p-datatable .p-datatable-tbody > tr > td {
     text-align: center;
     // font-size: 14px !important;
@@ -83,6 +91,7 @@
     border-width: 0px 0px 1px 0px;
   }
 }
+
 .actionicon {
   font-family: normal !important;
 }
@@ -93,6 +102,7 @@
   text-align: center;
   padding-top: 20px;
 }
+
 .warning_message {
   font-weight: 500;
   font-size: 26px;
@@ -104,25 +114,30 @@
   color: rgb(255, 255, 255);
   font-family: Oswald !important;
 }
+
 ::ng-deep {
   .pi {
     margin-top: 4px;
   }
+
   .p-dialog .p-dialog-header .p-dialog-title {
     font-weight: 500;
     font-size: 18px;
     color: $primary;
   }
+
   .p-dialog .p-dialog-header {
     border-radius: 0px;
     background: rgb(40, 40, 40);
     border: 0.6px solid rgba(240, 240, 240, 0.2);
     height: 55px;
   }
+
   .p-dialog .p-dialog-footer {
     display: none;
     border-radius: 0px;
   }
+
   .p-dialog .p-dialog-content {
     background: rgb(40, 40, 40);
     overflow: hidden;
@@ -133,11 +148,13 @@
     border: 0.6px solid rgba(240, 240, 240, 0.2);
     border-radius: 0px !important;
   }
+
   .p-dialog .p-dialog-content:last-of-type {
     border-bottom-right-radius: 0px !important;
     border-bottom-left-radius: 0px !important;
     // border-radius: none !important;
   }
+
   .deletFooter {
     .p-button {
       font-family: normal;
@@ -162,18 +179,21 @@
         border-color: $primary;
         font-family: sans-serif !important;
       }
+
       .p-button:enabled:hover {
         background: none !important;
         color: $primary;
         border-color: $primary;
       }
     }
+
     .p-button:enabled:hover {
       background: $primary !important;
       color: #000000;
       border-color: $primary;
     }
   }
+
   .p-multiselect {
     min-width: 100%;
     border-radius: 0px;
@@ -182,20 +202,25 @@
     background: #0f0f0f;
     border: 0.6px solid rgba(240, 240, 240, 0.2);
   }
+
   .p-multiselect:not(.p-disabled):hover {
     border-color: rgba(240, 240, 240, 0.2);
   }
+
   p-multiselect.ng-dirty.ng-invalid > .p-multiselect {
     border: 0.6px solid rgba(240, 240, 240, 0.2);
   }
+
   .p-multiselect.p-multiselect-chip .p-multiselect-label {
     height: 38px;
     padding-top: 8px;
   }
+
   .p-multiselect:not(.p-disabled).p-focus {
     border-color: rgba(240, 240, 240, 0.2);
     box-shadow: none !important;
   }
+
   .p-multiselect-panel {
     background: #0f0f0f;
     color: #495057;
@@ -203,29 +228,35 @@
     border-radius: 0px;
     box-shadow: none;
   }
+
   .p-multiselect-panel .p-multiselect-header {
     display: none;
   }
+
   .p-multiselect-panel .p-multiselect-items .p-multiselect-item {
     color: white;
     box-shadow: none;
     font-size: 15px;
   }
+
   .p-multiselect-panel
     .p-multiselect-items
     .p-multiselect-item:not(.p-highlight):not(.p-disabled):hover {
     color: $primary;
     background: #0f0f0f;
   }
+
   .p-multiselect-panel .p-multiselect-items .p-multiselect-item.p-highlight {
     color: $primary;
     background: #0f0f0f;
   }
+
   .p-multiselect-panel .p-multiselect-items .p-multiselect-item:focus {
     outline: 0 none;
     outline-offset: 0;
     box-shadow: none;
   }
+
   .p-checkbox .p-checkbox-box {
     border: 2px solid #ced4da;
     background: transparent;
@@ -236,18 +267,22 @@
     transition: background-color 0.2s, color 0.2s, border-color 0.2s,
       box-shadow 0.2s;
   }
+
   .p-checkbox .p-checkbox-box.p-highlight {
     border-color: $primary;
     background: $primary;
   }
+
   .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-highlight:hover {
     border-color: $primary;
     background: $primary;
     color: #000000;
   }
+
   .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box:hover {
     border-color: $primary;
   }
+
   .p-multiselect.p-multiselect-chip .p-multiselect-token {
     padding: 0.375rem 0.75rem;
     background: transparent;
@@ -255,10 +290,13 @@
     border-radius: 3px;
     border: 1px solid white;
   }
-    .p-multiselect.p-multiselect-chip .p-multiselect-token .p-multiselect-token-icon {
-      margin-left: 0.5rem;
-      margin-top: 0px;
-    }
+
+  .p-multiselect.p-multiselect-chip
+    .p-multiselect-token
+    .p-multiselect-token-icon {
+    margin-left: 0.5rem;
+    margin-top: 0px;
+  }
 }
 
 .Upload-btn {
@@ -291,11 +329,13 @@
     color: black;
     border-color: $primary;
   }
+
   .p-button:enabled:hover {
     background: $primary;
     color: #000000;
     border-color: $primary;
   }
+
   .p-button:enabled:active {
     background: $primary;
     color: #000000;
@@ -305,6 +345,7 @@
   .p-button:focus {
     box-shadow: none;
   }
+
   .cancelButton {
     .p-button:enabled:hover {
       background: transparent;
@@ -315,6 +356,7 @@
       background: transparent;
       color: $primary;
     }
+
     .p-button {
       background-color: transparent;
       color: $primary;
@@ -328,6 +370,7 @@
 .model_card_body {
   font-family: Oswald !important;
 }
+
 .info-msgs {
   font-weight: 400;
   font-size: 12px;
@@ -344,6 +387,7 @@
   .p-component {
     font-family: Oswald !important;
   }
+
   .p-inputtext {
     height: 38px;
   }
@@ -362,15 +406,19 @@
   top: -1px;
   right: 32%;
 }
+
 .uploadpicture:hover {
   opacity: 0.7;
 }
+
 .imagedeleteicon {
   visibility: hidden;
 }
+
 .uploadpicture:hover + .imagedeleteicon {
   visibility: visible;
 }
+
 .imagedeleteicon:hover {
   visibility: visible;
 }
@@ -380,20 +428,22 @@
     font-family: Oswald !important;
     font-size: 14px !important;
   }
+
   .p-inputtext {
     font-family: Oswald !important;
     font-size: 14px !important;
   }
-     .pac-container {
-       z-index: 2207;
-     }
-}
 
+  .pac-container {
+    z-index: 2207;
+  }
+}
 
 ::ng-deep {
   .p-error {
     color: red;
   }
+
   .p-paginator {
     background: #000000;
     color: #f0f0f0;
@@ -402,6 +452,7 @@
     // padding: 0.5rem 1rem;
     border-radius: 3px;
   }
+
   .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
     background: #202020;
     border-color: #202020;
@@ -411,6 +462,7 @@
     // min-height: 45px;
     // max-height: 45px;
   }
+
   .p-paginator .p-dropdown {
     background: #202020;
     border: none;
@@ -420,40 +472,48 @@
     min-height: 45px;
     max-height: 45px;
   }
+
   .p-dropdown-label {
     padding-top: 13px !important;
     margin-left: 6px;
   }
+
   .p-dropdown:not(.p-disabled).p-focus {
     box-shadow: none !important;
     border-color: none;
   }
+
   .p-dropdown-items-wrapper {
     overflow: none;
     background: #0f0f0f;
     border-radius: 0px;
     color: white !important;
   }
+
   .p-dropdown-panel .p-dropdown-items .p-dropdown-item {
     color: white;
     background: #0f0f0f;
   }
+
   .p-dropdown-panel
     .p-dropdown-items
     .p-dropdown-item:not(.p-highlight):not(.p-disabled):hover {
     color: white;
     background: #0f0f0f;
   }
+
   .p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight {
     color: white;
     background: #202020;
   }
+
   .p-link:focus {
     outline: 0 none;
     outline-offset: 0;
     box-shadow: none !important;
   }
 }
+
 .disableicons {
   opacity: 0.5;
   cursor: context-menu !important;
@@ -469,17 +529,21 @@
 
 ::ng-deep {
   .p-inputswitch {
-      height: 0.75rem !important;
-    }
+    height: 0.75rem !important;
+  }
+
   .p-inputswitch.p-focus .p-inputswitch-slider {
     box-shadow: none !important;
   }
+
   .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
     border-color: $primary !important;
   }
+
   .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider:before {
     background: $primary !important;
   }
+
   .p-inputswitch .p-inputswitch-slider {
     transition: background-color 0.2s, color 0.2s, border-color 0.2s;
     box-shadow: none;
@@ -488,18 +552,15 @@
     width: 36px;
     border: 2px solid #ffffff;
   }
+
   .p-inputswitch .p-inputswitch-slider:before {
     box-shadow: none;
     left: -3px;
     transition-duration: 0.2s;
   }
-   .p-button-label {
+
+  .p-button-label {
     font-weight: 500;
   }
-  // .p-button .p-button-icon-left {
-  //     margin-right: 0 rem;
-  //   }
-  //       .p-button .p-button-icon-right {
-  //         margin-right: 0 rem;
-  //       }
+
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import {
@@ -8,26 +8,31 @@ import {
   RouterStateSnapshot,
   UrlTree,
 } from '@angular/router';
+import { HttpConfigInterceptor } from 'src/app/interceptor/http-config.interceptor';
+import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  baseURL: string = environment.BASE_URL;
   headers = new HttpHeaders();
+  errorEmitter = new EventEmitter<boolean>();
   constructor(private http: HttpClient, private route: Router) {}
+  ngOnInit(): void {}
   signup(data: any) {
-    const url = 'http://50.19.24.41/api/auth/signup';
+    const url = this.baseURL + 'auth/signup';
     return this.http.post(url, data);
   }
   avatars() {
-    return this.http.get('http://50.19.24.41/api/auth/avatars');
+    return this.http.get(this.baseURL + 'auth/avatars');
   }
   signin(userdata) {
-    const url = 'http://50.19.24.41/api/auth/login';
+    const url = this.baseURL + 'auth/login';
     return this.http.post(url, userdata);
   }
 
   forgot(mail) {
-    const url = 'http://50.19.24.41/api/auth/request-reset-password';
+    const url = this.baseURL + 'auth/request-reset-password';
     return this.http.post(url, mail);
   }
   canActivate(

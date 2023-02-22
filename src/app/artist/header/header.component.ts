@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Toast, ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 import { ArtistService } from 'src/app/shared/services/artist service/artist.service';
 
 @Component({
@@ -20,7 +21,12 @@ export class HeaderComponent {
   defaultavatar: string = 'http://50.19.24.41/assets/images/profilepic2.png';
   changePasswordModal: boolean = false;
   changePasswordForm: FormGroup;
-  errorList: any = '';
+  errorList: string = '';
+  patternvalidation: boolean = false;
+  correctPassword: boolean = false;
+  newPassword: boolean = false;
+  changePasswordApi: Subscription;
+  buttonloader: boolean = false;
   constructor(
     private route: Router,
     private toaster: ToastrService,
@@ -51,19 +57,20 @@ export class HeaderComponent {
     });
   }
   ngOnInit(): void {
-    let loginData = JSON.parse(localStorage.getItem('login'));
-    // console.log(loginData.data.user.userName, 'king');
-    this.username = loginData.data.user.userName;
-    this.useravatar = loginData.data.user.avatar;
-    // console.log(this.useravatar);
+    this.artist.userData().subscribe((res) => {
+      this.useravatar = res['data'].avatar;
+      this.username = res['data'].userName;
+    });
   }
   logout() {
-    localStorage.clear();
-    let timer = setTimeout(() => {
-      this.route.navigateByUrl('/auth/login');
-    }, 2000);
-
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('login');
+    localStorage.removeItem('band');
+    this.route.navigateByUrl('/auth/login');
     this.toaster.success('You have been logged Out');
+  }
+  myProfileRoute() {
+    this.route.navigateByUrl('/artist/profile');
   }
   changePassword() {
     this.changePasswordModal = true;
@@ -72,21 +79,21 @@ export class HeaderComponent {
     changePasswordForm: FormGroup,
     type: string
   ): boolean {
-    return (
+    this.correctPassword =
       (changePasswordForm.get(type).touched ||
         changePasswordForm.get(type).dirty) &&
       changePasswordForm.get(type)?.errors !== null &&
-      changePasswordForm.get(type)?.errors.required
-    );
+      changePasswordForm.get(type)?.errors.required;
+    return this.correctPassword;
   }
   // pattern Error Messages
   inputPatternValidation(changePasswordForm: FormGroup, type: string): boolean {
-    return (
+    this.patternvalidation =
       (changePasswordForm.get(type)?.touched ||
         changePasswordForm.get(type)?.dirty) &&
       changePasswordForm.get(type)?.errors !== null &&
-      changePasswordForm.get(type)?.errors.pattern
-    );
+      changePasswordForm.get(type)?.errors.pattern;
+    return this.patternvalidation;
   }
   // Password checking Validation
   checkPasswordValidation(
@@ -94,12 +101,12 @@ export class HeaderComponent {
     password: string,
     confirmpassword: string
   ): boolean {
-    return (
+    this.newPassword =
       (changePasswordForm.get(confirmpassword).touched ||
         changePasswordForm.get(confirmpassword).dirty) &&
       changePasswordForm.get(password)?.value !==
-        changePasswordForm.get(confirmpassword)?.value
-    );
+        changePasswordForm.get(confirmpassword)?.value;
+    return this.newPassword;
   }
   // new Password Validation
   changePasswordValidation(
@@ -115,21 +122,26 @@ export class HeaderComponent {
     );
   }
   close() {
+    this.changePasswordApi?.unsubscribe();
     this.changePasswordForm.reset();
     this.changePasswordModal = false;
   }
   save() {
+    this.buttonloader = true;
     if (this.changePasswordForm.invalid) {
     } else {
       let object = {
         currentPassword: this.changePasswordForm.value.oldpassword,
         password: this.changePasswordForm.value.password,
       };
-      this.artist.changePassword(object).subscribe((res) => {
-        this.toaster.success(res['message']);
-        this.changePasswordForm.reset();
-        this.changePasswordModal = false;
-      });
+      this.changePasswordApi = this.artist
+        .changePassword(object)
+        .subscribe((res) => {
+          this.buttonloader = false;
+          this.toaster.success(res['message']);
+          this.changePasswordForm.reset();
+          this.changePasswordModal = false;
+        });
     }
   }
 }

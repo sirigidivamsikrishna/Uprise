@@ -1,5 +1,5 @@
 @import "../../../colors.scss";
-
+@import "../../../global.scss";
 .event_management {
   background-color: #100b00;
   height: calc(100vh - 72px);
@@ -149,7 +149,7 @@
   visibility: hidden;
 }
 
-.uploadpicture:hover+.imagedeleteicon {
+.uploadpicture:hover + .imagedeleteicon {
   visibility: visible;
 }
 
@@ -189,22 +189,28 @@
   }
   .p-calendar .p-datepicker {
     color: white;
+    top: -382px !important;
+    border-radius: 3px !important;
     background: #0f0f0f;
     border: 0.6px solid rgba(240, 240, 240, 0.3);
   }
   .p-datepicker:not(.p-datepicker-inline) .p-datepicker-header {
     color: white;
+      max-height: 46px;
     background: #0f0f0f;
   }
   .p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-month {
     color: white;
   }
+    .p-datepicker .p-timepicker {
+      max-height: 84px;
+    }
 
   .p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-year {
     color: white;
   }
   .p-datepicker table td.p-datepicker-today > span.p-highlight {
-   color: #495057;
+    color: #495057;
   }
   .p-datepicker .p-timepicker span {
     font-size: 14px;
@@ -223,15 +229,30 @@
   }
   .p-datepicker table td > span.p-highlight {
     color: #495057;
-      background: #E3F2FD;
+    background: #e3f2fd;
   }
-    .p-datepicker table td>span:focus {
-      outline: 0 none;
-      outline-offset: 0;
-       box-shadow: none; 
-    }
+  .p-datepicker table td > span:focus {
+    outline: 0 none;
+    outline-offset: 0;
+    box-shadow: none;
+  }
+
 }
 .disableicons {
-  opacity: 0.5;
+  opacity: 0.7;
   cursor: context-menu !important;
+}
+.textAreaDescription {
+  ::ng-deep {
+    .p-inputtext {
+      height: 80px !important;
+      overflow-y: auto;
+    }
+  }
+}
+.model_card_body{
+  ::ng-deep
+.p-disabled {
+  opacity: 0.3;
+}
 }

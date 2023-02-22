@@ -1,3 +1,4 @@
+@import "../../../colors.scss";
 .header_container {
   background-color: #000000;
   color: #ffffff;
@@ -15,7 +16,7 @@
 .header_text {
   font-size: 20px;
   color: white;
-  font-family: Oswald !important;
+  font-family: $font !important;
 }
 .header_component{
 border-bottom: 1px solid #524646ad;
@@ -45,7 +46,7 @@ border-bottom: 1px solid #524646ad;
 }
 .username {
   cursor: pointer;
-  font-family: Oswald !important;
+  font-family: $font !important;
   margin-top: 8px;
   margin-left: 15px;
   font-size: 17px;
@@ -66,7 +67,7 @@ border-bottom: 1px solid #524646ad;
     margin-right: 5px;
 }
 .overlay_template{
-font-family: Oswald !important;
+font-family: $font !important;
 }
 ::ng-deep {
 

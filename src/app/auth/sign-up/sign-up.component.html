@@ -35,7 +35,7 @@
           <app-input-text
             [formGroup]="signupform"
             [name]="'username'"
-            [placeholder]="'Enter your Name'"
+            [placeholder]="'Enter your username'"
             [label]="'Username'"
             [type]="'text'"
             [icon]="'pi pi-user'"
@@ -130,29 +130,18 @@
               <i class="pi pi-map-marker"></i>
             </span>
           </div>
-
-          <!-- <small
-                  class="p-error"
-                  [innerHTML]="
-                    inputRequiredValidation(signupform, 'location')
-                      ? 'location is required'
-                      : '&nbsp;'
-                  "
-                ></small> -->
-          <!-- <app-input-location
-            [formGroup]="signupform"
-            [icon]="'pi pi-map-marker'"
-            name="location"
-            [results]="results"
-            (location)="locationChange($event)"
-            [label]="'Location'"
-            [placeholder]="'Enter Location'"
-            [error]="
-              inputRequiredValidation(signupform, 'location')
-                ? 'Location is required.'
-                : errorList['']
-            "
-          ></app-input-location> -->
+          <div>
+            <small
+              class="p-error"
+              [innerHTML]="
+                inputRequiredValidation(signupform, 'location')
+                  ? 'location is required'
+                  : venueChecking(signupform, 'location')
+                  ? 'Enter valid cityName'
+                  : '&nbsp;'
+              "
+            ></small>
+          </div>
         </div>
 
         <div class="col-6" style="height: 85px">
@@ -213,7 +202,12 @@
           [type]="'submit'"
           (submitForm)="submit()"
           [label]="'REGISTER'"
-          [disabled]="this.signupform.invalid || !this.checked"
+          [disabled]="
+            this.signupform.invalid ||
+            !this.checked ||
+            locationValidator ||
+            passwordValidator
+          "
         ></app-button>
       </div>
 
@@ -229,6 +223,7 @@
   </div>
 </div>
 
+<!-- profile Avatar Model  -->
 <div class="avatarModelDivision">
   <p-dialog
     [(visible)]="displayModal"

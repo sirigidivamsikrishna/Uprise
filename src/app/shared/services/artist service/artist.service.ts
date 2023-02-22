@@ -1,46 +1,53 @@
 import { HttpParams, HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-
+import { EventEmitter, Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root',
 })
 export class ArtistService {
+  buttonLoading: boolean;
+  baseURL: string = environment.BASE_URL;
+  errorLoader = new EventEmitter<boolean>();
   constructor(private http: HttpClient) {}
+
+  userData() {
+    return this.http.get(this.baseURL + 'user/me');
+  }
 
   // Songs Management
   songsData(bandid: number) {
     let params = new HttpParams();
     params = params.set('bandId', bandid);
-    return this.http.get('http://50.19.24.41/api/song/songs-list', {
+    return this.http.get(this.baseURL + 'song/songs-list', {
       params: params,
     });
   }
-  deleteData(bandId: number) {
-    let url = 'http://50.19.24.41/api/song/' + bandId;
+  deleteSong(bandId: number) {
+    let url = this.baseURL + 'song/' + bandId;
     return this.http.delete(url);
   }
   getGenre() {
-    return this.http.get('http://50.19.24.41/api/auth/genres');
+    return this.http.get(this.baseURL + 'auth/genres');
   }
   uploadSong(songData) {
-    let url = 'http://50.19.24.41/api/song/upload';
+    let url = this.baseURL + 'song/upload';
     return this.http.post(url, songData);
   }
   updateSong(songId: number, updateData) {
-    let url = 'http://50.19.24.41/api/song/edit/' + songId;
+    let url = this.baseURL + 'song/edit/' + songId;
     return this.http.put(url, updateData);
   }
   live(liveObject) {
-    let url = 'http://50.19.24.41/api/song/live';
+    let url = this.baseURL + 'song/live';
     return this.http.put(url, liveObject);
   }
-  search(
+  gettingData(
     searchInput: string,
     pageNumber: number,
     perPage: number,
-    bandId?: number
+    bandId: string
   ) {
-    let url = 'http://50.19.24.41/api/song/songs-list';
+    let url = this.baseURL + 'song/songs-list';
     let params = new HttpParams();
     params = params
       .set('bandId', bandId)
@@ -51,27 +58,10 @@ export class ArtistService {
       params: params,
     });
   }
-  paginate(
-    pageNumber: number,
-    perPage: number,
-    bandId?: number,
-    search?: string
-  ) {
-    let url = 'http://50.19.24.41/api/song/songs-list';
-    let params = new HttpParams();
-    params = params
-      .set('bandId', bandId)
-      .set('search', search)
-      .set('currentPage', pageNumber)
-      .set('perPage', perPage);
-    return this.http.get(url, {
-      params: params,
-    });
-  }
 
   // Events management
-  getEvents(bandId, currentPage, perPage, search?: string) {
-    let url = 'http://50.19.24.41/api/eventmanagement/events-list';
+  getEvents(bandId, currentPage, perPage, search: string) {
+    let url = this.baseURL + 'eventmanagement/events-list';
     let params = new HttpParams();
     params = params
       .set('bandId', bandId)
@@ -83,25 +73,25 @@ export class ArtistService {
     });
   }
   deleteEvent(eventId, bandId) {
-    let url = ' http://50.19.24.41/api/eventmanagement/event/' + eventId;
+    let url = this.baseURL + '/eventmanagement/event/' + eventId;
     return this.http.delete(url, { body: bandId });
   }
   changePassword(updatedPassword) {
-    let url = 'http://50.19.24.41/api/user/change-password';
+    let url = this.baseURL + 'user/change-password';
     return this.http.put(url, updatedPassword);
   }
   uploadEvent(eventData) {
-    let url = 'http://50.19.24.41/api/eventmanagement/create-event';
+    let url = this.baseURL + 'eventmanagement/create-event';
     return this.http.post(url, eventData);
   }
   updateEvent(Id, eventData) {
-    let url = 'http://50.19.24.41/api/eventmanagement/update-event/' + Id;
+    let url = this.baseURL + 'eventmanagement/update-event/' + Id;
     return this.http.put(url, eventData);
   }
   // Band Details
 
   bandDetails(bandId) {
-    let url = 'http://50.19.24.41/api/band/band_details';
+    let url = this.baseURL + 'band/band_details';
     let params = new HttpParams();
     params = params.set('bandId', bandId);
     return this.http.get(url, {
@@ -109,11 +99,11 @@ export class ArtistService {
     });
   }
   editBand(bandData) {
-    let url = 'http://50.19.24.41/api/band/edit_band';
+    let url = this.baseURL + 'band/edit_band';
     return this.http.put(url, bandData);
   }
   bandMembers(bandId) {
-    let url = 'http://50.19.24.41/api/band/bandmembers_list';
+    let url = this.baseURL + 'band/bandmembers_list';
     let params = new HttpParams();
     params = params.set('bandId', bandId);
     return this.http.get(url, {
@@ -121,7 +111,7 @@ export class ArtistService {
     });
   }
   bandGallery(bandId) {
-    let url = 'http://50.19.24.41/api/band/band_images';
+    let url = this.baseURL + 'band/band_images';
     let params = new HttpParams();
     params = params.set('bandId', bandId);
     return this.http.get(url, {
@@ -129,11 +119,11 @@ export class ArtistService {
     });
   }
   uploadGalleryImage(formData) {
-    let url = 'http://50.19.24.41/api/band/upload_images';
+    let url = this.baseURL + 'band/upload_images';
     return this.http.post(url, formData);
   }
   deleteGalleryImages(bandId, checkBoxObject) {
-    let url = 'http://50.19.24.41/api/band/delete_images';
+    let url = this.baseURL + 'band/delete_images';
     let params = new HttpParams();
     params = params.set('bandId', bandId);
     return this.http.delete(url, {
@@ -142,7 +132,7 @@ export class ArtistService {
     });
   }
   getBandMembers(bandId, query) {
-    let url = ' http://50.19.24.41/api/band/members';
+    let url = this.baseURL + '/band/members';
     let params = new HttpParams();
     params = params.set('bandId', bandId).set('search', query);
     return this.http.get(url, {
@@ -150,11 +140,17 @@ export class ArtistService {
     });
   }
   bandMemberInvite(object) {
-    let url = 'http://50.19.24.41/api/bandmember/invite';
+    let url = this.baseURL + 'bandmember/invite';
     return this.http.post(url, object);
   }
   deleteBandMember(bandId, Id) {
-    let url = 'http://50.19.24.41/api/band/' + bandId + '/bandmember/' + Id;
+    let url = this.baseURL + 'band/' + bandId + '/bandmember/' + Id;
     return this.http.delete(url);
+  }
+
+  // My Profile
+  updateProfile(data) {
+    let url = this.baseURL + 'user/update_profile';
+    return this.http.put(url, data);
   }
 }

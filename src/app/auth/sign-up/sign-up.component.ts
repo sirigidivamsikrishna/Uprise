@@ -10,13 +10,18 @@ import { AuthService } from 'src/app/shared/services/auth service/auth.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Address } from 'ngx-google-places-autocomplete/objects/address';
+import {
+  PasswordValidation,
+  PatternValidation,
+  RequiredValidation,
+} from 'src/app/shared/validations/validations';
 @Component({
   selector: 'app-sign-up',
   templateUrl: './sign-up.component.html',
   styleUrls: ['./sign-up.component.scss'],
 })
 export class SignUpComponent implements OnInit {
-  errorList: any = '';
+  errorList: string = '';
   text: string = '';
   results: string[];
   signupform: FormGroup;
@@ -28,10 +33,12 @@ export class SignUpComponent implements OnInit {
   displayModal: boolean = false;
   profileImageclick: string;
   formattedaddress: string;
-  latitude: any;
-  longitude: any;
-  addressState: any;
+  latitude: string;
+  longitude: string;
+  addressState: string;
   avatarimages: { id: number; url: string }[];
+  locationValidator: boolean = false;
+  passwordValidator: boolean = false;
   constructor(
     private fb: FormBuilder,
     private location: LocationService,
@@ -90,21 +97,13 @@ export class SignUpComponent implements OnInit {
 
   locationChange(address: Address) {
     this.formattedaddress = address.formatted_address;
-    this.latitude = address.geometry.location.lat();
-    this.longitude = address.geometry.location.lng();
-    console.log(this.formattedaddress, 'total');
-
-    console.log(
-      this.formattedaddress.split(',')[0] +
-        ',' +
-        this.formattedaddress.split(',')[1],
-      'street'
-    );
+    this.signupform.patchValue({
+      location: this.formattedaddress,
+    });
+    this.latitude = address.geometry.location.lat().toString();
+    this.longitude = address.geometry.location.lng().toString();
     this.addressState = this.formattedaddress.split(',')[3];
-    console.log(this.addressState.split(' ')[1], 'state');
-    console.log(this.addressState.split(' ')[2], 'zipcode');
-    console.log(this.formattedaddress.split(',')[2], 'city');
-    console.log(this.formattedaddress.split(',')[4], 'country');
+    console.log(this.formattedaddress);
   }
   showAvatars() {
     this.displayModal = true;
@@ -161,19 +160,18 @@ export class SignUpComponent implements OnInit {
   }
   // Required Error Messages
   inputRequiredValidation(signupform: FormGroup, type: string): boolean {
-    return (
-      (signupform.get(type).touched || signupform.get(type).dirty) &&
-      signupform.get(type)?.errors !== null &&
-      signupform.get(type)?.errors.required
-    );
+    return RequiredValidation(signupform, type);
   }
   // pattern Error Messages
   inputPatternValidation(signupForm: FormGroup, type: string): boolean {
-    return (
-      (signupForm.get(type)?.touched || signupForm.get(type)?.dirty) &&
-      signupForm.get(type)?.errors !== null &&
-      signupForm.get(type)?.errors.pattern
-    );
+    return PatternValidation(signupForm, type);
+  }
+  // location checking validation
+  venueChecking(form, type) {
+    this.locationValidator =
+      (form.get(type)?.touched || form.get(type)?.dirty) &&
+      this.formattedaddress != this.signupform.value.location;
+    return this.locationValidator;
   }
   // Password checking Validation
   checkPasswordValidation(
@@ -181,10 +179,11 @@ export class SignUpComponent implements OnInit {
     password: string,
     confirmpassword: string
   ): boolean {
-    return (
-      (signupForm.get(confirmpassword).touched ||
-        signupForm.get(confirmpassword).dirty) &&
-      signupForm.get(password)?.value !== signupForm.get(confirmpassword)?.value
+    this.passwordValidator = PasswordValidation(
+      signupForm,
+      password,
+      confirmpassword
     );
+    return this.passwordValidator;
   }
 }

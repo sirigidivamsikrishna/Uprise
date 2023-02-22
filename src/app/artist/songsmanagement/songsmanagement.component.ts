@@ -6,7 +6,14 @@ import { GooglePlaceDirective } from 'ngx-google-places-autocomplete';
 import { Paginator } from 'primeng/paginator';
 import { Address } from 'ngx-google-places-autocomplete/objects/address';
 import { NgxSpinnerService } from 'ngx-spinner';
-
+import { debounce } from 'lodash';
+import { Subscription } from 'rxjs';
+import { songsData } from 'src/app/shared/interface/interface';
+import {
+  PatternValidation,
+  RequiredValidation,
+} from 'src/app/shared/validations/validations';
+import { getLocaleFirstDayOfWeek } from '@angular/common';
 @Component({
   selector: 'app-songsmanagement',
   templateUrl: './songsmanagement.component.html',
@@ -14,54 +21,49 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class SongsmanagementComponent {
   modalHeader: string = 'Upload Song';
-  value3: any;
-  data: any;
   search: FormGroup;
-  songs: any[] = [];
-  bandid;
+  songs: songsData[] = [];
+  bandid: string;
   deleteId: number;
   display: boolean = false;
   songsUploadModal: boolean = false;
   songsForm: FormGroup;
-  formattedaddress: any;
-  genreOptions: any;
-  selectedGenre: any;
-  latitude: any;
-  longitude: any;
+  formattedaddress: string;
+  genreOptions: { id: number; name: string }[] = [];
+  latitude: string;
+  longitude: string;
   showAudiodata: boolean = false;
   band = JSON.parse(localStorage.getItem('band'));
   defaultthumbnail: string = 'http://50.19.24.41/assets/images/audio.png';
-  imgFile: any;
-  ImgfileName: any;
   uploadimageSrc: string = '';
-  songEditModal: boolean = false;
-  duration: any;
-  errorList: any = '';
-  userId: any;
+  errorList: string = '';
+  userId: string;
   fileAudio: any = '';
   thumbnail: any;
   action: string = 'upload';
   editId: number;
   editSongUrl: string;
   editThumbnailUrl: string;
-  editlongitude: any;
-  editlatitude: any;
+  editlongitude: string;
+  editlatitude: string;
   totalSongs: number;
-  pageNumber: number;
+  pageNumber: number = 1;
   perPage: number;
   searchText: string = '';
+  uploadSongApi: Subscription;
+  updateSongApi: Subscription;
+  cityCheck: Boolean = false;
+  songButton: boolean = false;
   constructor(
     private arist: ArtistService,
     private fb: FormBuilder,
     private toast: ToastrService,
     private spinner: NgxSpinnerService
   ) {
+    this.searchtable = debounce(this.searchtable, 1500);
     this.search = this.fb.group({ search: [''] });
     this.songsForm = this.fb.group({
-      title: [
-        '',
-        [Validators.required, Validators.pattern('^(?=.*[a-zA-Z]).+$')],
-      ],
+      title: ['', [Validators.required]],
       thumbnail: [''],
       song: [''],
       genre: ['', Validators.required],
@@ -70,82 +72,78 @@ export class SongsmanagementComponent {
   }
 
   ngOnInit(): void {
-    this.spinner.show();
-    this.pageNumber = 1;
+    this.arist.errorLoader.subscribe((res) => {
+      console.log(res, 'songsManagemet');
+    });
     this.perPage = 10;
+    this.spinner.show();
     let loginData = JSON.parse(localStorage.getItem('login'));
     this.userId = loginData.data.user.id;
     this.bandid = this.band.id;
-    this.arist.songsData(this.bandid).subscribe((res) => {
-      this.songs = res['data'].data;
-      this.totalSongs = res['data'].data.length;
-      this.spinner.hide();
+    this.getData();
+    this.arist.getGenre().subscribe((res) => {
+      this.genreOptions = res['data'];
     });
-
-    this.arist.getGenre().subscribe((res) => (this.genreOptions = res['data']));
+  }
+  getData() {
+    this.arist
+      .gettingData(
+        this.searchText ? this.searchText : '',
+        this.pageNumber ? this.pageNumber : 1,
+        this.perPage ? this.perPage : 10,
+        this.bandid
+      )
+      .subscribe((res) => {
+        this.spinner.hide();
+        this.songs = res['data'].data;
+        this.totalSongs = +this.songs[0]?.totalCount;
+      });
   }
 
   paginate(event) {
+    this.spinner.show();
     this.pageNumber = event.page + 1;
     this.perPage = event.rows;
-    this.arist
-      .paginate(this.pageNumber, this.perPage, this.bandid)
-      .subscribe((res) => {
-        this.songs = res['data'].data;
-        this.totalSongs = res['data'].data.length;
-      });
+    this.getData();
   }
   // validations
   inputRequiredValidation(songsForm: FormGroup, type: string): boolean {
-    return (
-      (songsForm.get(type).touched || songsForm.get(type).dirty) &&
-      songsForm.get(type)?.errors !== null &&
-      songsForm.get(type)?.errors.required
-    );
+    return RequiredValidation(songsForm, type);
   }
   inputPatternValidation(songsForm: FormGroup, type: string): boolean {
-    return (
+    return PatternValidation(songsForm, type);
+  }
+  // city checking validation
+  venueChecking(songsForm, type) {
+    this.cityCheck =
       (songsForm.get(type)?.touched || songsForm.get(type)?.dirty) &&
-      songsForm.get(type)?.errors !== null &&
-      songsForm.get(type)?.errors.pattern
-    );
+      this.formattedaddress != this.songsForm.value.cityName;
+    return this.cityCheck;
   }
   searchClear() {
     this.searchText = '';
+    this.pageNumber = 1;
     this.spinner.show();
-
-    this.refresh();
     this.search.patchValue({
       search: '',
     });
+    this.getData();
   }
   searchtable(event) {
+    this.spinner.show();
     this.searchText = event.target.value;
-    this.arist
-      .search(this.searchText, this.pageNumber, this.perPage, this.bandid)
-      .subscribe((res) => {
-        this.songs = res['data'].data;
-        this.totalSongs = res['data'].data.length;
-      });
+    this.pageNumber = 1;
+    this.getData();
   }
   deleteSong(Id: number, bandid: number) {
     this.display = true;
     this.deleteId = Id;
   }
-
-  refresh() {
-    this.arist.songsData(this.bandid).subscribe((res) => {
-      this.totalSongs = res['data'].data.length;
-      this.songs = res['data'].data;
-      this.spinner.hide();
-    });
-  }
   deleteconfirm() {
-    this.arist.deleteData(this.deleteId).subscribe((res) => {
+    this.arist.deleteSong(this.deleteId).subscribe((res) => {
       this.toast.success(`${res['message']}`);
-      console.log(res, 'response');
       this.spinner.show();
-      this.refresh();
+      this.getData();
     });
     this.display = false;
   }
@@ -153,12 +151,23 @@ export class SongsmanagementComponent {
     this.display = false;
   }
   songLive(id, live) {
-    console.log(id, 'id', live, 'live');
     let object = {
       songId: id,
       live: live,
     };
-    this.arist.live(object).subscribe((res) => console.log(res));
+    // console.log(this.songs);
+    // console.log(id);
+
+    this.arist.live(object).subscribe(
+      (res) => {},
+      (error) => {
+        this.songs.forEach((e) => {
+          if (e.id == id) {
+            e.live = false;
+          }
+        });
+      }
+    );
   }
 
   uploadSong() {
@@ -169,8 +178,6 @@ export class SongsmanagementComponent {
   }
   Imageupload(event) {
     this.thumbnail = event.target.files[0];
-    // console.log(event.target.files, 'kkk');
-
     const reader = new FileReader();
     if (event.target.files && event.target.files.length) {
       const [file] = event.target.files;
@@ -179,24 +186,15 @@ export class SongsmanagementComponent {
         this.uploadimageSrc = reader.result as string;
       };
     }
+    event.target.value = '';
   }
   uploadAudio(event) {
     this.fileAudio = event.target.files[0];
     this.songsForm.patchValue({
       title: this.fileAudio?.name.split('.')[0].slice(0, 30),
     });
-    var fileName = this.fileAudio.name;
-    var fileSize = this.fileAudio.size;
-    var fileType = this.fileAudio.type;
-
     this.showAudiodata = true;
-    // new Audio(URL.createObjectURL(fileAudio)).onloadedmetadata = (e: any) => {
-    //   this.duration = e.currentTarget.duration;
-    // };
-    // console.log('king', this.duration);
-    // console.log('audio', fileAudio);
-    // console.log('size', fileSize);
-    // console.log('type', fileType);
+    event.target.value = '';
   }
   removeAudio() {
     this.showAudiodata = false;
@@ -208,79 +206,96 @@ export class SongsmanagementComponent {
   }
   Address(address: Address) {
     this.formattedaddress = address.formatted_address;
-    this.latitude = address.geometry.location.lat();
-    this.longitude = address.geometry.location.lng();
-    console.log(this.formattedaddress.split(',')[0], 'format');
-    console.log(this.formattedaddress.split(',')[1], 'format');
-    console.log(this.formattedaddress.split(',')[2], 'format');
-    const Data = this.songsForm.value;
-    // console.log(Data.genre, 'lo');
+    this.latitude = address.geometry.location.lat().toString();
+    this.longitude = address.geometry.location.lng().toString();
+
+    this.songsForm.patchValue({
+      cityName: this.formattedaddress,
+    });
   }
-  genersSelect(r) {
-    // console.log(r);
-  }
+
+  genersSelect(r) {}
   songsModalClose() {
-    this.songsUploadModal = false;
-    this.clearUploadModal();
-  }
-
-  saveSong() {
-    if (this.action == 'upload') {
-      // console.log(this.songsForm.value, 'hello');
-      const Data = this.songsForm.value;
-      const formData = new FormData();
-      formData.append('title', Data.title);
-      Data.genre?.forEach((item) => formData.append('genres', item.name));
-      // formData.append('genres', Data.genre);
-      formData.append('cityName', this.formattedaddress.split(',')[0]);
-      formData.append(
-        'stateName',
-        this.formattedaddress.split(',')[1].slice(1)
-      );
-      formData.append('country', this.formattedaddress.split(',')[2].slice(1));
-      formData.append('latitude', this.latitude);
-      formData.append('longitude', this.longitude);
-      formData.append('albumId', '');
-      formData.append('userId', this.userId);
-      formData.append('bandId', this.bandid);
-      formData.append('song', this.fileAudio);
-      formData.append('thumbnail', this.thumbnail);
-      this.arist.uploadSong(formData).subscribe((res) => {
-        this.toast.success(`${res['message']}`);
-        this.clearUploadModal();
-        this.songsUploadModal = false;
-        this.spinner.show();
-        this.refresh();
-      });
-    }
-
     if (this.action == 'update') {
-      console.log(this.songsForm.value, 'hello');
-      console.log(this.formattedaddress, 'adress');
-      const Data = this.songsForm.value;
-      const formData = new FormData();
-      formData.append('title', Data.title);
-      Data.genre?.forEach((item) => formData.append('genres', item.name));
-      formData.append('latitude', this.editlatitude);
-      formData.append('longitude', this.editlongitude);
-      formData.append('albumId', '');
-      formData.append('userId', this.userId);
-      formData.append('bandId', this.bandid);
-      formData.append('cityName', Data.cityName.split(',')[0]);
-      formData.append('stateName', Data.cityName.split(',')[1].slice(1));
-      formData.append('country', Data.cityName.split(',')[2].slice(1));
-      formData.append('song', this.fileAudio);
-      formData.append(
-        'thumbnail',
-        this.thumbnail != '' ? this.thumbnail : this.editThumbnailUrl
-      );
-      this.arist.updateSong(this.editId, formData).subscribe((res) => {
-        this.toast.success(`${res['message']}`);
-        this.clearUploadModal();
-        this.songsUploadModal = false;
-        this.spinner.show();
-        this.refresh();
-      });
+      this.songsUploadModal = false;
+      this.clearUploadModal();
+      this.updateSongApi?.unsubscribe();
+    }
+    if (this.action == 'upload') {
+      this.songsUploadModal = false;
+      this.clearUploadModal();
+      this.uploadSongApi?.unsubscribe();
+    }
+  }
+  saveSong() {
+    if (this.songsForm.valid && this.fileAudio && !this.cityCheck) {
+      this.songButton = true;
+      if (this.action == 'upload') {
+        const Data = this.songsForm.value;
+        const formData = new FormData();
+        formData.append('title', Data.title);
+        Data.genre?.forEach((item) => formData.append('genres', item.name));
+        formData.append('cityName', this.formattedaddress.split(',')[0]);
+        formData.append(
+          'stateName',
+          this.formattedaddress.split(',')[1].slice(1)
+        );
+        formData.append(
+          'country',
+          this.formattedaddress.split(',')[2].slice(1)
+        );
+        formData.append('latitude', this.latitude);
+        formData.append('longitude', this.longitude);
+        formData.append('albumId', '');
+        formData.append('userId', this.userId);
+        formData.append('bandId', this.bandid);
+        formData.append('song', this.fileAudio);
+        formData.append('thumbnail', this.thumbnail);
+
+        this.uploadSongApi = this.arist
+          .uploadSong(formData)
+          .subscribe((res) => {
+            this.songButton = false;
+            this.toast.success(`${res['message']}`);
+            this.clearUploadModal();
+            this.songsUploadModal = false;
+            this.spinner.show();
+            this.getData();
+            this.thumbnail = '';
+          });
+      }
+
+      if (this.action == 'update') {
+        const Data = this.songsForm.value;
+        const formData = new FormData();
+        formData.append('title', Data.title);
+        Data.genre?.forEach((item) => formData.append('genres', item.name));
+        formData.append('latitude', this.editlatitude);
+        formData.append('longitude', this.editlongitude);
+        formData.append('albumId', '');
+        formData.append('userId', this.userId);
+        formData.append('bandId', this.bandid);
+        formData.append('cityName', Data.cityName.split(',')[0]);
+        formData.append('stateName', Data.cityName.split(',')[1].slice(1));
+        formData.append('country', Data.cityName.split(',')[2].slice(1));
+        formData.append('song', this.fileAudio);
+        formData.append(
+          'thumbnail',
+          this.thumbnail != '' ? this.thumbnail : this.editThumbnailUrl
+        );
+
+        this.updateSongApi = this.arist
+          .updateSong(this.editId, formData)
+          .subscribe((res) => {
+            this.songButton = false;
+            this.toast.success(`${res['message']}`);
+            this.clearUploadModal();
+            this.songsUploadModal = false;
+            this.spinner.show();
+            this.getData();
+            this.thumbnail = '';
+          });
+      }
     }
   }
   removeImg() {
@@ -297,8 +312,6 @@ export class SongsmanagementComponent {
     this.action = 'update';
     this.modalHeader = 'Edit Song';
     this.songsUploadModal = true;
-    console.log(songData, 'dda');
-
     var songgenres = songData.genres.map(({ id, genre_name }) => ({
       id: id,
       name: genre_name,
@@ -315,10 +328,6 @@ export class SongsmanagementComponent {
     this.editlatitude = songData.latitude;
     this.editlongitude = songData.longitude;
     this.fileAudio = this.editSongUrl;
-
-    // console.log(this.editSongUrl, 'song');
-    // console.log(this.editThumbnailUrl, 'thumbnail');
-
     this.showAudiodata = true;
     this.uploadimageSrc = songData.thumbnail;
   }
