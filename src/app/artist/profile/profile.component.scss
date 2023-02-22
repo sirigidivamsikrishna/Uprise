@@ -1,0 +1,108 @@
+@import "../../../colors.scss";
+.profile_Container {
+  // background-color: #100b00;
+  height: calc(100vh - 72px);
+  padding: 40px;
+  color: #fff;
+  // background: #282828;
+  overflow-y: auto;
+}
+.profileDetails {
+  background: #181818;
+  border: 0.6px solid rgba(240, 240, 240, 0.2);
+  box-sizing: border-box;
+  box-shadow: none;
+  border-radius: 2px;
+  padding: 25px;
+  // min-height: 600px;
+}
+.profileText {
+  font-weight: 500;
+  font-size: 19px;
+  line-height: 18px;
+  color: #fff;
+}
+.pencilEditDiv {
+  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.upload_profile_Pic {
+  height: 115px;
+  border-radius: 50%;
+  background: #3f3f3f;
+}
+.profileSubTitle {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 0px;
+  color: #fff;
+}
+.inputHeight {
+  height: 100px;
+}
+
+::ng-deep {
+  .p-disabled,
+  .p-component:disabled {
+    opacity: 1 !important;
+  }
+}
+::ng-deep {
+  .p-button {
+    height: 41px;
+    width: 110px;
+    border-radius: 30px;
+    background-color: $primary;
+    color: black;
+    border-color: $primary;
+  }
+
+  .p-button:enabled:hover {
+    background: $primary;
+    color: #000000;
+    border-color: $primary;
+  }
+
+  .p-button:enabled:active {
+    background: $primary;
+    color: #000000;
+    border-color: $primary;
+  }
+
+  .p-button:focus {
+    box-shadow: none;
+  }
+
+  .cancelButton {
+    .p-button:enabled:hover {
+      background: transparent;
+      color: $primary;
+    }
+
+    .p-button:enabled:active {
+      background: transparent;
+      color: $primary;
+    }
+
+    .p-button {
+      background-color: transparent;
+      color: $primary;
+      width: 110px;
+      border-color: $primary;
+      font-family: sans-serif !important;
+    }
+  }
+  .editProfilePic{
+  position: absolute;
+    top: 72%;
+    right: 26%;
+    color: black;
+    border-radius: 50%;
+    background-color: #DCF763;
+    padding: 0px 7px 2px 7px;
+  
+  }
+}

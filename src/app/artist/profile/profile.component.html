@@ -1,0 +1,159 @@
+<div class="profile_Component">
+  <div class="profile_Container">
+    <div class="profileDetails">
+      <div class="grid">
+        <div class="col-6">
+          <p class="profileText">{{ profileHeader }}</p>
+        </div>
+        <div class="col-6 pencilEditDiv">
+          <i
+            *ngIf="!editProfile"
+            (click)="editProfileDetails()"
+            pTooltip="Edit"
+            tooltipPosition="right"
+            style="font-size: 20px; cursor: pointer"
+            class="pi pi-pencil pensilEditor"
+          ></i>
+        </div>
+      </div>
+      <div class="grid" style="display: flex; justify-content: center">
+        <div class="col-2">
+          <div style="text-align: center">
+            <p class="mt-3">Avatar</p>
+          </div>
+
+          <div style="text-align: center; position: relative">
+            <span>
+              <img
+                class="upload_profile_Pic"
+                [src]="
+                  ProfilePic
+                    ? ProfilePic
+                    : '../../../../../assets/images/profilepic2.png'
+                "
+              />
+            </span>
+            <span
+              class="editProfilePic"
+              style="cursor: pointer"
+              (click)="uploadProfilePic()"
+            >
+              <div>
+                <i style="font-size: 11px" class="pi pi-pencil"></i>
+              </div>
+            </span>
+          </div>
+        </div>
+        <div class="col-10">
+          <p class="profileSubTitle">Account Information</p>
+          <br />
+          <br />
+          <div class="grid">
+            <div class="col-6 inputHeight">
+              <app-input-text
+                [formGroup]="profileForm"
+                [name]="'userName'"
+                [placeholder]="'Enter your username'"
+                [label]="'Username'"
+                [type]="'text'"
+                [icon]="'pi pi-user'"
+                [iconpadding]="'true'"
+                [error]="
+                  inputRequiredValidation(profileForm, 'userName')
+                    ? 'Username is required.'
+                    : errorList['']
+                "
+              >
+              </app-input-text>
+            </div>
+            <div class="col-6 inputHeight">
+              <app-input-text
+                [formGroup]="profileForm"
+                [name]="'email'"
+                [placeholder]="'Enter your email'"
+                [label]="'Email'"
+                [type]="'text'"
+                [icon]="'pi pi-envelope'"
+                [iconpadding]="'true'"
+              >
+              </app-input-text>
+            </div>
+            <div class="col-6 inputHeight">
+              <app-input-text
+                [formGroup]="profileForm"
+                [name]="'mobilenumber'"
+                [placeholder]="'Enter your mobile number'"
+                [label]="'Mobile number'"
+                [type]="'number'"
+                [icon]="'pi pi-phone'"
+                [iconpadding]="'true'"
+              >
+              </app-input-text>
+            </div>
+            <div class="col-6 inputHeight">
+              <app-input-text
+                [formGroup]="profileForm"
+                [name]="'facebook'"
+                [placeholder]="'Facebook'"
+                [label]="'Facebook'"
+                [type]="'text'"
+                [icon]="'pi pi-user'"
+                [iconpadding]="'true'"
+              >
+              </app-input-text>
+            </div>
+            <div class="col-6 inputHeight">
+              <app-input-text
+                [formGroup]="profileForm"
+                [name]="'twitter'"
+                [placeholder]="'Twitter'"
+                [label]="'Twitter'"
+                [type]="'text'"
+                [icon]="'pi pi-user'"
+                [iconpadding]="'true'"
+              >
+              </app-input-text>
+            </div>
+            <div class="col-6 inputHeight">
+              <app-input-text
+                [formGroup]="profileForm"
+                [name]="'instagram'"
+                [placeholder]="'Instagram'"
+                [label]="'Instagram'"
+                [type]="'text'"
+                [icon]="'pi pi-user'"
+                [iconpadding]="'true'"
+              >
+              </app-input-text>
+            </div>
+            <div class="col-12 flex">
+              <div class="col-9"></div>
+              <div class="col-3 flex text-center" *ngIf="editProfile">
+                <div>
+                  <span class="cancelButton">
+                    <p-button
+                      (click)="cancelProfileDetails()"
+                      label="Cancel"
+                      class="profileCancelButton"
+                    ></p-button>
+                  </span>
+                </div>
+                &nbsp; &nbsp;&nbsp;
+                <div style="max-width: 100px">
+                  <p-button
+                    label="Save"
+                    (click)="saveProfileDetails()"
+                    [type]="'submit'"
+                    [loading]="saveButton"
+                    class="profileSaveButton"
+                    [disabled]="profileForm.invalid"
+                  ></p-button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

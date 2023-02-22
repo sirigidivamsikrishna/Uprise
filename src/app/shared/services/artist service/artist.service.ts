@@ -73,7 +73,7 @@ export class ArtistService {
     });
   }
   deleteEvent(eventId, bandId) {
-    let url = ' http://50.19.24.41/api/eventmanagement/event/' + eventId;
+    let url = this.baseURL + '/eventmanagement/event/' + eventId;
     return this.http.delete(url, { body: bandId });
   }
   changePassword(updatedPassword) {
@@ -132,7 +132,7 @@ export class ArtistService {
     });
   }
   getBandMembers(bandId, query) {
-    let url = ' http://50.19.24.41/api/band/members';
+    let url = this.baseURL + '/band/members';
     let params = new HttpParams();
     params = params.set('bandId', bandId).set('search', query);
     return this.http.get(url, {
@@ -146,5 +146,11 @@ export class ArtistService {
   deleteBandMember(bandId, Id) {
     let url = this.baseURL + 'band/' + bandId + '/bandmember/' + Id;
     return this.http.delete(url);
+  }
+
+  // My Profile
+  updateProfile(data) {
+    let url = this.baseURL + 'user/update_profile';
+    return this.http.put(url, data);
   }
 }

@@ -10,6 +10,7 @@ import { EventmanagementComponent } from './eventmanagement/eventmanagement.comp
 import { BandprofileComponent } from './bandprofile/bandprofile.component';
 import { SharedModule } from '../shared/shared.module';
 import { PrimengModule } from '../shared/primeng/primeng.module';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { PrimengModule } from '../shared/primeng/primeng.module';
     SongsmanagementComponent,
     EventmanagementComponent,
     BandprofileComponent,
+    ProfileComponent,
   ],
   imports: [
     CommonModule,

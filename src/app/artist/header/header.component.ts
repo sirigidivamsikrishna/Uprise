@@ -69,6 +69,9 @@ export class HeaderComponent {
     this.route.navigateByUrl('/auth/login');
     this.toaster.success('You have been logged Out');
   }
+  myProfileRoute() {
+    this.route.navigateByUrl('/artist/profile');
+  }
   changePassword() {
     this.changePasswordModal = true;
   }

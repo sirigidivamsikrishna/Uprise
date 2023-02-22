@@ -47,6 +47,7 @@ export class EventmanagementComponent {
   venueCheck: boolean = false;
   eventDescriptionCount: number = 255;
   eventButton: boolean = false;
+  isDisabled: boolean = true;
   constructor(
     private arist: ArtistService,
     private fb: FormBuilder,
@@ -85,11 +86,12 @@ export class EventmanagementComponent {
       });
   }
   createEvent() {
+    // this.eventsForm.get('description').disable();
     this.modalHeader = 'Upload Event';
     this.uploadEventModelAction = true;
     this.clearModal();
   }
-  openmodel() {}
+
   searchClear() {
     this.spinner.show();
     this.search.patchValue({

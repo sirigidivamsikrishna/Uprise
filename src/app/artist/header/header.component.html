@@ -24,7 +24,7 @@
 <p-overlayPanel #op [style]="{ width: '450px' }">
   <ng-template pTemplate>
     <div class="overlay_template">
-      <p style="cursor: pointer">
+      <p style="cursor: pointer" (click)="myProfileRoute()">
         <i class="pi pi-user iconoverlay"></i> My Profile
       </p>
       <p style="cursor: pointer" (click)="changePassword()">

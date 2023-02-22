@@ -23,7 +23,7 @@ export class HttpConfigInterceptor implements HttpInterceptor {
     private artist: ArtistService
   ) {}
   ngOnInit() {
-    // this.spinner.show();
+    this.spinner.show();
   }
   intercept(
     request: HttpRequest<any>,
@@ -41,7 +41,7 @@ export class HttpConfigInterceptor implements HttpInterceptor {
         this.auth.errorEmitter.emit(true);
         this.artist.errorLoader.emit(true);
         let ErrorMessage = this.ErrorToaster(error);
-        // this.spinner.hide();
+        this.spinner.hide();
         return throwError(ErrorMessage);
       })
     );
