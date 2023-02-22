@@ -1,3 +1,13 @@
+<!-- spinner -->
+<ngx-spinner
+  bdColor="rgba(0, 0, 0, 0.8)"
+  size="medium"
+  color="#fff"
+  type="ball-clip-rotate"
+  [fullScreen]="true"
+  ><p style="color: white">Loading...</p></ngx-spinner
+>
+
 <div class="profile_Component">
   <div class="profile_Container">
     <div class="profileDetails">
@@ -34,6 +44,7 @@
               />
             </span>
             <span
+              *ngIf="editProfile"
               class="editProfilePic"
               style="cursor: pointer"
               (click)="uploadProfilePic()"
@@ -57,6 +68,7 @@
                 [label]="'Username'"
                 [type]="'text'"
                 [icon]="'pi pi-user'"
+                [pattern]="'return event.charCode != 32'"
                 [iconpadding]="'true'"
                 [error]="
                   inputRequiredValidation(profileForm, 'userName')
@@ -156,4 +168,68 @@
       </div>
     </div>
   </div>
+</div>
+
+<!-- profile Avatar Model  -->
+<div class="avatarModelDivision">
+  <p-dialog
+    [(visible)]="displayProfileModal"
+    [modal]="true"
+    [style]="{ width: '47vw' }"
+    [draggable]="false"
+    [resizable]="false"
+    [baseZIndex]="10000"
+  >
+    <div class="modal_view_content">
+      <div class="modalProfilepic">
+        <span>
+          <img
+            class="uploaded-profile-pic"
+            [ngClass]="
+              profileImageclick != null ? 'border_profile' : 'bordercolornone'
+            "
+            [src]="
+              profileImageclick
+                ? profileImageclick
+                : '../../../assets/images/modelProfilePic.png'
+            "
+          />
+
+          <i
+            *ngIf="profileImageclick != null"
+            class="pi pi-times-circle profilepic_remove"
+            (click)="removeprofilepic()"
+          ></i>
+        </span>
+        <span> </span>
+      </div>
+      <div class="modelProfileText">Choose your avatar that suits you best</div>
+
+      <div class="modelPicsDisplay" style="display: flex; flex-wrap: wrap">
+        <div *ngFor="let item of avatarimages" class="col-2">
+          <img
+            height="80px"
+            (click)="avatarclick(item)"
+            class="model_avatar_images"
+            [ngClass]="profileImageclick ? 'bordercolor' : 'bordercolornone'"
+            src="{{ item.url }}"
+          />
+        </div>
+      </div>
+      <div class="modelFooter">
+        <p-button
+          (click)="avatarSelected()"
+          label="CONTINUE"
+          class="modelContinueButton"
+        ></p-button>
+        <span class="backgroundButton">
+          <p-button
+            (click)="avatarCancel()"
+            label="CANCEL"
+            class="modelCancelButton"
+          ></p-button>
+        </span>
+      </div>
+    </div>
+  </p-dialog>
 </div>

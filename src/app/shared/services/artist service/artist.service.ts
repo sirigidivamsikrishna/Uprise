@@ -153,4 +153,7 @@ export class ArtistService {
     let url = this.baseURL + 'user/update_profile';
     return this.http.put(url, data);
   }
+  avatars() {
+    return this.http.get(this.baseURL + 'auth/avatars');
+  }
 }

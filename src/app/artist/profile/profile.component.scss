@@ -106,3 +106,123 @@
   
   }
 }
+
+// Profile Model
+.uploaded-profile-pic {
+  height: 94px;
+  width: 98px;
+  border-radius: 50%;
+  position: absolute;
+  left: -4px;
+  top: -4px;
+  object-fit: cover;
+  background-color: $avatarbg;
+}
+
+.border_profile {
+  border: 3px solid white;
+}
+.avatarModelDivision {
+  ::ng-deep .p-component {
+    font-family: $font !important;
+  }
+
+  .modalProfilepic {
+    border: 3px solid #ffff;
+    border-radius: 50%;
+    position: relative;
+    background: $primary;
+    width: 95px;
+    margin: 0 auto;
+    height: 92px;
+    margin-bottom: 20px;
+
+    .profilepic_remove {
+      position: absolute;
+      font-size: 20px;
+      top: 0px;
+      right: 4px;
+      background-color: #000;
+      border-radius: 10px;
+      cursor: pointer;
+      color: #fff;
+    }
+  }
+
+  .modelProfileText {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 38px;
+    text-align: center;
+    color: #fff;
+  }
+
+  .modelFooter {
+    text-align: center;
+    margin-top: 50px;
+  }
+
+  ::ng-deep {
+    .p-dialog .p-dialog-header {
+      display: none;
+    }
+
+    .p-dialog .p-dialog-content {
+      background: $modelbg;
+      padding: 25px;
+      min-width: 675px;
+    }
+
+    .p-dialog .p-dialog-footer {
+      display: none;
+    }
+
+    .p-button {
+      height: 42px;
+      width: 150px;
+      border-radius: 30px;
+      background-color: $primary;
+      color: black;
+      border-color: #dcf763;
+    }
+
+    .p-button:focus {
+      box-shadow: none;
+    }
+
+    .backgroundButton {
+      margin-left: 20px;
+
+      .p-button {
+        background-color: transparent;
+        color: white;
+        border-color: #dcf763;
+        font-family: sans-serif !important;
+      }
+    }
+  }
+
+  .modelPicsDisplay {
+    margin-top: 30px;
+    max-height: 250px;
+    overflow: auto;
+  }
+
+  .model_avatar_images {
+    border-radius: 50%;
+    background: #3f3f3f;
+  }
+
+  .model_avatar_images:active {
+    border: 2px solid $primary;
+  }
+
+  .modal_view_content {
+    padding: 0px 50px;
+  }
+
+  // .bordercolor{
+  // border: 2px solid $primary;
+  // }
+}

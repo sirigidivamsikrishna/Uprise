@@ -9,6 +9,7 @@ import {
 import { RequiredValidation } from 'src/app/shared/validations/validations';
 import { ToastrService } from 'ngx-toastr';
 import { NgxSpinnerService } from 'ngx-spinner';
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -17,16 +18,22 @@ import { NgxSpinnerService } from 'ngx-spinner';
 export class ProfileComponent {
   editProfile: boolean = false;
   profileHeader: string = 'Profile';
+  displayProfileModal: boolean = false;
   userData: any = {};
   ProfilePic: string = '';
   profileForm: FormGroup;
   errorList: string = '';
+  profileImageclick: string = '';
   saveButton: boolean = false;
+  avatarID: number;
+  avatarSelectedImage: string = '';
+  selectedAvatarId: string;
+  avatarimages: { id: number; url: string }[];
   constructor(
-    private arist: ArtistService,
+    private artist: ArtistService,
     private fb: FormBuilder,
     private toast: ToastrService,
-    private spin: NgxSpinnerService
+    private spinner: NgxSpinnerService
   ) {
     this.profileForm = this.fb.group({
       userName: ['', Validators.required],
@@ -38,16 +45,17 @@ export class ProfileComponent {
     });
   }
   ngOnInit(): void {
-    this.spin.show();
+    this.spinner.show();
     this.gettingUserData();
     this.disableForm();
+    this.artist.avatars().subscribe((res) => (this.avatarimages = res['data']));
   }
 
   gettingUserData() {
-    this.arist.userData().subscribe((res) => {
-      this.spin.hide();
+    this.artist.userData().subscribe((res) => {
       this.userData = res['data'];
       this.ProfilePic = res['data'].avatar;
+      this.selectedAvatarId = this.userData.avatarId;
       this.profileForm.patchValue({
         email: res['data'].email,
         userName: res['data'].userName,
@@ -56,6 +64,7 @@ export class ProfileComponent {
         instagram: res['data'].instagram,
         twitter: res['data'].twitter,
       });
+      this.spinner.hide();
     });
   }
 
@@ -80,14 +89,35 @@ export class ProfileComponent {
     this.profileForm.get('instagram').enable();
     this.profileForm.get('twitter').enable();
   }
-  uploadProfilePic() {}
+  uploadProfilePic() {
+    this.displayProfileModal = true;
+    this.profileImageclick = this.ProfilePic;
+  }
+
+  avatarclick(avatar) {
+    this.profileImageclick = avatar.url;
+    this.avatarID = avatar.id;
+  }
+  avatarSelected() {
+    this.ProfilePic = this.profileImageclick;
+    this.selectedAvatarId = JSON.stringify(this.avatarID);
+    this.displayProfileModal = false;
+  }
+  avatarCancel() {
+    this.profileImageclick = this.avatarSelectedImage;
+    this.displayProfileModal = false;
+  }
+  removeprofilepic() {
+    this.profileImageclick = null;
+    this.avatarID = null;
+  }
   cancelProfileDetails() {
     this.disableForm();
     this.editProfile = false;
     this.profileHeader = 'Profile';
   }
   saveProfileDetails() {
-    this.spin.show();
+    this.spinner.show();
     this.saveButton = true;
     const Data = this.profileForm.value;
     const formData = new FormData();
@@ -98,14 +128,15 @@ export class ProfileComponent {
     formData.append('instagram', Data.instagram);
     formData.append('twitter', Data.twitter);
     formData.append('facebook', Data.facebook);
-    formData.append('avatarId', '5');
-    this.arist.updateProfile(formData).subscribe((res) => {
-      this.toast.success(`${res['message']}`);
+    formData.append('avatarId', this.selectedAvatarId);
+    this.artist.updateProfile(formData).subscribe((res) => {
       this.gettingUserData();
       this.editProfile = false;
       this.profileHeader = 'Profile';
       this.saveButton = false;
       this.disableForm();
+      this.toast.success(`${res['message']}`);
+      window.location.reload();
     });
   }
 }

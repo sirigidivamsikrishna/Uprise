@@ -19,8 +19,9 @@ export class InputTextComponent implements OnInit {
   @Input() iconpadding = '';
   @Input() name = '';
   @Input() error = '';
-  @Input() maxlength = '';
-  @Input() minlength = '';
+  @Input() maxlength;
+  @Input() minlength;
+  @Input() pattern = '';
   @Input() formGroup: FormGroup;
   constructor() {}
 
