@@ -18,10 +18,10 @@
   color: white;
   font-family: $font !important;
 }
-.header_component{
-border-bottom: 1px solid #524646ad;
+.header_component {
+  border-bottom: 1px solid #524646ad;
 }
-        
+
 .header_left {
   display: flex;
   margin-left: 30px;
@@ -63,14 +63,13 @@ border-bottom: 1px solid #524646ad;
   }
 }
 
-.iconoverlay{
-    margin-right: 5px;
+.iconoverlay {
+  margin-right: 5px;
 }
-.overlay_template{
-font-family: $font !important;
+.overlay_template {
+  font-family: $font !important;
 }
 ::ng-deep {
-
   input:-webkit-autofill,
   input:-webkit-autofill:hover,
   input:-webkit-autofill:focus,
@@ -86,9 +85,26 @@ font-family: $font !important;
   input:-webkit-autofill:hover,
   input:-webkit-autofill:focus,
   input:-webkit-autofill:active {
-
     -webkit-box-shadow: 0 0 0 30px rgb(15, 15, 15) inset !important;
     transition: background-color 5000s ease-in-out 0s;
     -webkit-text-fill-color: #fff !important;
   }
+  .p-dialog .p-dialog-content {
+    background: rgb(40, 40, 40);
+    overflow: hidden;
+    color: rgb(255, 255, 255);
+    border: 0.6px solid rgba(240, 240, 240, 0.2);
+    border-radius: 0px !important;
+  }
+  .p-dialog .p-dialog-header {
+    border-radius: 0px;
+    background: rgb(40, 40, 40);
+    border: 0.6px solid rgba(240, 240, 240, 0.2);
+    height: 55px;
+    color: white;
+  }
+    .p-component {
+      font-family: Oswald !important;
+      font-size: 14px !important;
+    }
 }

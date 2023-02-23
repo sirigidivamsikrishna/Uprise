@@ -84,7 +84,11 @@ export class SignInComponent implements OnInit {
       localStorage.setItem('accessToken', res.data.accessToken);
       localStorage.setItem('login', login);
       localStorage.setItem('band', band);
-      this.router.navigate(['/artist']);
+      let role = res['data'].user.role.name;
+      if (role == 'artist') {
+        this.router.navigate(['/artist']);
+      }
+
       //  for opening in another page
       // let url = this.router.serializeUrl(
       //   this.router.createUrlTree(['/artist'])
