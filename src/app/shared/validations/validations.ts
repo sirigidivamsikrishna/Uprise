@@ -8,7 +8,6 @@ export function RequiredValidation(form, type: string): boolean {
 }
 
 // Pattern validation
-
 export function PatternValidation(form, type: string): boolean {
   return (
     (form.get(type)?.touched || form.get(type)?.dirty) &&
@@ -17,6 +16,7 @@ export function PatternValidation(form, type: string): boolean {
   );
 }
 
+// Password Validations
 export function PasswordValidation(
   form,
   password: string,

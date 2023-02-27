@@ -18,7 +18,7 @@ export interface songsData {
   title: string;
   totalCount: string;
 }
-export class eventData {
+export interface eventData {
   band: { id: number; title: string };
   deletedAt: null;
   description: string;
@@ -34,7 +34,7 @@ export class eventData {
 }
 
 // Band Profile component
-export class addBandMemberData {
+export interface addBandMemberData {
   avatar: null;
   email: string;
   id: number;
@@ -42,7 +42,7 @@ export class addBandMemberData {
   userName: string;
 }
 
-export class bandDetails {
+export interface bandDetails {
   createdAt: string;
   description: string;
   id: number;
@@ -50,7 +50,7 @@ export class bandDetails {
   title: string;
 }
 
-export class bandMembers {
+export interface bandMembers {
   amiFollowing: boolean;
   avatar: string;
   bandId: number;
@@ -60,7 +60,7 @@ export class bandMembers {
   role: { id: number; name: string };
   userName: string;
 }
-export class bandGallery {
+export interface bandGallery {
   createdAt: string;
   id: number;
   mediaType: string;

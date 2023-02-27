@@ -114,7 +114,7 @@ export class SongsmanagementComponent {
     return PatternValidation(songsForm, type);
   }
   // city checking validation
-  venueChecking(songsForm, type) {
+  venueChecking(songsForm: FormGroup, type: string): Boolean {
     this.cityCheck =
       (songsForm.get(type)?.touched || songsForm.get(type)?.dirty) &&
       this.formattedaddress != this.songsForm.value.cityName;

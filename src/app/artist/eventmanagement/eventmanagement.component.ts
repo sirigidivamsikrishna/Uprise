@@ -13,6 +13,7 @@ import {
   PatternValidation,
   RequiredValidation,
 } from 'src/app/shared/validations/validations';
+import { Address } from 'ngx-google-places-autocomplete/objects/address';
 @Component({
   selector: 'app-eventmanagement',
   templateUrl: './eventmanagement.component.html',
@@ -108,13 +109,13 @@ export class EventmanagementComponent {
     this.spinner.show();
     this.gettingEvents();
   }
-  editevent(item) {
+  editevent(item: eventData) {
     this.clearModal();
     this.modalHeader = 'Edit Event';
     this.editEventId = item.id;
     const event = item;
-    this.latitude = event.latitude;
-    this.longitude = event.longitude;
+    this.latitude = JSON.stringify(event.latitude);
+    this.longitude = JSON.stringify(event.longitude);
     this.uploadEventModelAction = true;
     let initialAddress = event.location.split(',')[0];
     let fullAddress = event.location.split(',').slice(1).join(',');
@@ -132,7 +133,7 @@ export class EventmanagementComponent {
     });
     this.eventDescriptionCount = 255 - this.eventsForm.value.description.length;
   }
-  deleteevent(id) {
+  deleteevent(id: number) {
     this.displaydeleteModal = true;
     this.deleteId = id;
   }
@@ -151,7 +152,12 @@ export class EventmanagementComponent {
     });
     this.displaydeleteModal = false;
   }
-  paginate(pageData) {
+  paginate(pageData: {
+    page: number;
+    first: number;
+    rows: number;
+    pageCount: number;
+  }) {
     this.currentPage = pageData.page + 1;
     this.perpage = pageData.rows;
     this.gettingEvents();
@@ -174,13 +180,13 @@ export class EventmanagementComponent {
     this.thumbnail = '';
   }
 
-  Address(event) {
+  Address(event: Address) {
     this.address = event.name + ',' + event.formatted_address;
     this.eventsForm.patchValue({
       venue: this.address,
     });
-    this.latitude = event.geometry.location.lat();
-    this.longitude = event.geometry.location.lng();
+    this.latitude = JSON.stringify(event.geometry.location.lat());
+    this.longitude = JSON.stringify(event.geometry.location.lng());
   }
   // validations
   inputRequiredValidation(eventsForm: FormGroup, type: string): boolean {
@@ -191,13 +197,17 @@ export class EventmanagementComponent {
   }
 
   // city checking validation
-  venueChecking(eventsForm, type) {
+  venueChecking(eventsForm: FormGroup, type: string): boolean {
     this.venueCheck =
       (eventsForm.get(type)?.touched || eventsForm.get(type)?.dirty) &&
       this.address != this.eventsForm.value.venue;
     return this.venueCheck;
   }
-  dateTimeValidationChecking(eventsForm, startDate, endDate) {
+  dateTimeValidationChecking(
+    eventsForm: FormGroup,
+    startDate: string,
+    endDate: string
+  ): boolean {
     let difference =
       eventsForm.get(endDate)?.value - eventsForm.get(startDate)?.value;
     if (
